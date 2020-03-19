@@ -1,4 +1,3 @@
-// #include "gba_video.h"
 #include <stdbool.h>
 
 /* 16-bit volatile register */
@@ -67,7 +66,7 @@ int main(void){
         }
 
         // if Left is pressed
-        if (is_pressed(BUTTON_LEFT, buttons) == 0 && x > 0) {
+        if (is_pressed(BUTTON_LEFT, buttons) && x > 0) {
             x -= 1;
         }
 
