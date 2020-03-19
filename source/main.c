@@ -64,9 +64,7 @@ int main(void){
         set_pixel(x-2+i, BAR_HEIGHT, 0xFFFF);
     }
 
-    struct ball_status bs;
-    bs.y = 0;
-    bs.is_up = false;
+    struct ball_status bs = {0, false};
     set_pixel(MODE3_WIDTH/2, bs.y, 0xFFFF);
 
     for(int i=0; i<2; i++){
