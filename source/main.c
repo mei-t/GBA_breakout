@@ -18,6 +18,13 @@
 /* Video memory */
 #define VRAM ((volatile unsigned short *)0x06000000)
 
+/* Size in pixels of screen in mode 3 */
+#define MODE3_WIDTH 240
+#define MODE3_HEIGHT 160
+
+/* Height of the bar */
+#define BAR_HEIGHT 140
+
 /* Wait for vertical sync */
 void wait_vsync() {
     while (REG_VCOUNT >= MODE3_HEIGHT);
@@ -31,9 +38,15 @@ bool is_pressed(unsigned short BUTTON, unsigned short buttons){
 
 /* Set a pixel. */
 void set_pixel(unsigned short x, unsigned short y, unsigned short color){
-    VRAM[y * 240 + x] = color;
+    VRAM[y * MODE3_WIDTH + x] = color;
     return;
 }
+
+struct ball_status{
+    unsigned short y;
+    bool is_up;
+};
+
 
 int main(void){
     volatile char *ioreg = (char *)0x04000000;
@@ -48,12 +61,16 @@ int main(void){
 
     int x = 120;
     for(int i=0; i<5; i++){
-        set_pixel(x-2+i, 80, 0xFFFF);
+        set_pixel(x-2+i, BAR_HEIGHT, 0xFFFF);
     }
+
+    struct ball_status bs;
+    bs.y = 0;
+    bs.is_up = false;
+    set_pixel(MODE3_WIDTH/2, bs.y, 0xFFFF);
 
     for(int i=0; i<2; i++){
         for(int j=0; j<3; j++){
-            // VRAM[(2+i)*240 + j] = 0x7C00;
             set_pixel(j, 2+i, 0x7C00);
         }
     }
@@ -72,18 +89,29 @@ int main(void){
         char buttons = ioreg[0x130];
         // vram[80*240 + x] = 0x0;
 
+        if((bs.is_up && bs.y == 0) || (!bs.is_up && bs.y == MODE3_HEIGHT-1)){
+            bs.is_up = !bs.is_up;
+        }
+        set_pixel(MODE3_WIDTH/2, bs.y, 0x0);
+        if(bs.is_up){
+            bs.y--;
+        }else{
+            bs.y++;
+        }
+        set_pixel(MODE3_WIDTH/2, bs.y, 0xFFFF);
+
         // if Right is pressed
         if (is_pressed(BUTTON_RIGHT, buttons) && x < 237) {
-            set_pixel(x-2, 80, 0x0);
-            x += 1;
-            set_pixel(x+2, 80, 0xFFFF);
+            set_pixel(x-2, BAR_HEIGHT, 0x0);
+            x++;
+            set_pixel(x+2, BAR_HEIGHT, 0xFFFF);
         }
 
         // if Left is pressed
         if (is_pressed(BUTTON_LEFT, buttons) && x > 2) {
-            set_pixel(x+2, 80, 0x0);
-            x -= 1;
-            set_pixel(x-2, 80, 0xFFFF);
+            set_pixel(x+2, BAR_HEIGHT, 0x0);
+            x--;
+            set_pixel(x-2, BAR_HEIGHT, 0xFFFF);
         }
 
         // vram[80*240 + x] = 0xFFFF; // X = x, Y = 80, C = 111111111111 = W
