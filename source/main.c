@@ -41,21 +41,20 @@ int main(void){
     ioreg[1] = 0x04; // not understand
 
     // Write pixel colors into VRAM
-    volatile unsigned short *vram = (unsigned short *)0x06000000;
+    // volatile unsigned short *vram = (unsigned short *)0x06000000;
     // vram[80*240 + 115] = 0x001F; // X = 115, Y = 80, C = 000000000011111 = R
     // vram[80*240 + 120] = 0x03E0; // X = 120, Y = 80, C = 000001111100000 = G
     // vram[80*240 + 125] = 0x7C00; // X = 125, Y = 80, C = 111110000000000 = B
 
     int x = 120;
-    vram[80*240 + x - 2] = 0xFFFF;
-    vram[80*240 + x - 1] = 0xFFFF;
-    vram[80*240 + x] = 0xFFFF;
-    vram[80*240 + x + 1] = 0xFFFF;
-    vram[80*240 + x + 2] = 0xFFFF;
+    for(int i=0; i<5; i++){
+        set_pixel(x-2+i, 80, 0xFFFF);
+    }
 
     for(int i=0; i<2; i++){
         for(int j=0; j<3; j++){
-            vram[(2+i)*240 + j] = 0x7C00;
+            // VRAM[(2+i)*240 + j] = 0x7C00;
+            set_pixel(j, 2+i, 0x7C00);
         }
     }
     // for(int i=0; i<10; i++){
@@ -75,18 +74,16 @@ int main(void){
 
         // if Right is pressed
         if (is_pressed(BUTTON_RIGHT, buttons) && x < 237) {
-            set_pixel(80, x-2, 0x0);
-            // vram[80*240 + x - 2] = 0x0;
+            set_pixel(x-2, 80, 0x0);
             x += 1;
-            // vram[80*240 + x + 2] = 0xFFFF;
-            set_pixel(80, x+2, 0xFFFF);
+            set_pixel(x+2, 80, 0xFFFF);
         }
 
         // if Left is pressed
         if (is_pressed(BUTTON_LEFT, buttons) && x > 2) {
-            vram[80*240 + x + 2] = 0x0;
+            set_pixel(x+2, 80, 0x0);
             x -= 1;
-            vram[80*240 + x - 2] = 0xFFFF;
+            set_pixel(x-2, 80, 0xFFFF);
         }
 
         // vram[80*240 + x] = 0xFFFF; // X = x, Y = 80, C = 111111111111 = W
