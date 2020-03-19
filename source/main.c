@@ -66,13 +66,13 @@ int main(void){
         char buttons = ioreg[0x130];
         vram[80*240 + x] = 0x0;
 
-        // if A is pressed
-        if ((buttons & (1 << 4) == 0) && x < 239) {
+        // if Right is pressed
+        if ((buttons & (1 << 4)) == 0 && x < 239) {
             x += 1;
         }
 
-        // if B is pressed
-        if ((buttons & (1 << 4) == 0) && x > 0) {
+        // if Left is pressed
+        if ((buttons & (1 << 5)) == 0 && x > 0) {
             x -= 1;
         }
 
