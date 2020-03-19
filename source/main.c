@@ -1,5 +1,8 @@
 // #include "gba_video.h"
 
+/* 16-bit volatile register */
+#define VR16(x) *((volatile unsigned short *)(x))
+
 #define REG_IOBASE 0x04000000
 /* Vertical sync */
 #define REG_VCOUNT VR16(REG_IOBASE + 0x6)
@@ -65,12 +68,12 @@ int main(void){
 
         // if A is pressed
         if ((buttons & 0x1) == 0 && x < 239) {
-            x++;
+            x += 1;
         }
 
         // if B is pressed
         if ((buttons & 0x2) == 0 && x > 0) {
-            x--;
+            x -= 1;
         }
 
         // if left is pressed
