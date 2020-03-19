@@ -27,6 +27,22 @@ int main(void){
 
     int x = 0;
 
+    for(int i=0; i<2; i++){
+        for(int j=0; j<3; j++){
+            vram[(2+i)*240 + j] = 0x7C00;
+        }
+    }
+    vram[80*240] = 0xFFFF;
+    // for(int i=0; i<10; i++){
+    //     for(int j=0; j<3; j++){
+    //         for(int k=0; k<2; k++){
+    //             vram[2*240 + i]
+    //         }
+    //     }
+    // }
+
+    // while(1);
+
     // Wait forever
     while(1){
         // volatile char bottuns = ioreg[0x130];
@@ -49,12 +65,12 @@ int main(void){
 
         // if A is pressed
         if ((buttons & 0x1) == 0 && x < 239) {
-            x += 1;
+            x++;
         }
 
         // if B is pressed
         if ((buttons & 0x2) == 0 && x > 0) {
-            x -= 1;
+            x--;
         }
 
         // if left is pressed
