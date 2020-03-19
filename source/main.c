@@ -16,7 +16,7 @@
 #define BUTTON_LEFT (1 << 5)
 
 /* Video memory */
-#define VRAM ((volatile unsigned short *)0x06000000
+#define VRAM ((volatile unsigned short *)0x06000000)
 
 /* Wait for vertical sync */
 void wait_vsync() {
@@ -32,6 +32,7 @@ bool is_pressed(unsigned short BUTTON, unsigned short buttons){
 /* Set a pixel. */
 void set_pixel(unsigned short x, unsigned short y, unsigned short color){
     VRAM[y * 240 + x] = color;
+    return;
 }
 
 int main(void){
