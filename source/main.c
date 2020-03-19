@@ -15,6 +15,9 @@
 #define BUTTON_RIGHT (1 << 4)
 #define BUTTON_LEFT (1 << 5)
 
+/* Video memory */
+#define VRAM ((volatile unsigned short *)0x06000000
+
 /* Wait for vertical sync */
 void wait_vsync() {
     while (REG_VCOUNT >= MODE3_HEIGHT);
@@ -24,6 +27,11 @@ void wait_vsync() {
 /* If the button pressed or not. */
 bool is_pressed(unsigned short BUTTON, unsigned short buttons){
     return (BUTTON & buttons) == 0;
+}
+
+/* Set a pixel. */
+void set_pixel(unsigned short x, unsigned short y, unsigned short color){
+    VRAM[y * 240 + x] = color;
 }
 
 int main(void){
@@ -66,9 +74,11 @@ int main(void){
 
         // if Right is pressed
         if (is_pressed(BUTTON_RIGHT, buttons) && x < 237) {
-            vram[80*240 + x - 2] = 0x0;
+            set_pixel(80, x-2, 0x0);
+            // vram[80*240 + x - 2] = 0x0;
             x += 1;
-            vram[80*240 + x + 2] = 0xFFFF;
+            // vram[80*240 + x + 2] = 0xFFFF;
+            set_pixel(80, x+2, 0xFFFF);
         }
 
         // if Left is pressed
