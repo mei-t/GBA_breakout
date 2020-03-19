@@ -1,4 +1,5 @@
 // #include "gba_video.h"
+#include <stdbool.h>
 
 /* 16-bit volatile register */
 #define VR16(x) *((volatile unsigned short *)(x))
@@ -11,10 +12,19 @@
 #define MODE3_WIDTH 240
 #define MODE3_HEIGHT 160
 
+/* Status of buttons */
+#define BUTTON_RIGHT (1 << 4)
+#define BUTTON_LEFT (1 << 5)
+
 /* Wait for vertical sync */
 void wait_vsync() {
     while (REG_VCOUNT >= MODE3_HEIGHT);
     while (REG_VCOUNT < MODE3_HEIGHT);
+}
+
+/* If the button pressed or not. */
+bool is_pressed(unsigned short BUTTON, unsigned short buttons){
+    return (BUTTON & buttons) == 0;
 }
 
 int main(void){
@@ -44,41 +54,22 @@ int main(void){
     //     }
     // }
 
-    // while(1);
 
     // Wait forever
     while(1){
-        // volatile char bottuns = ioreg[0x130];
-
-        // // If Right pressed
-        // if((bottuns & 0x4) == 0 && y < 240){
-        //     y += 1;
-        // }
-
-        // // If Left pressed
-        // if((bottuns & 0x5) == 0 && y > 0){
-        //     y -= 1;
-        // }
-        // vram[80*240 + y] = 0x7C00;
-
-
         // unsigned short color = 0x001F;
         char buttons = ioreg[0x130];
         vram[80*240 + x] = 0x0;
 
         // if Right is pressed
-        if ((buttons & (1 << 4)) == 0 && x < 239) {
+        if (is_pressed(BUTTON_RIGHT, buttons) && x < 239) {
             x += 1;
         }
 
         // if Left is pressed
-        if ((buttons & (1 << 5)) == 0 && x > 0) {
+        if (is_pressed(BUTTON_LEFT, buttons) == 0 && x > 0) {
             x -= 1;
         }
-
-        // if left is pressed
-        //if ((buttons & ))
-
 
         vram[80*240 + x] = 0xFFFF; // X = x, Y = 80, C = 111111111111 = W
         wait_vsync();
