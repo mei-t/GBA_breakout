@@ -43,8 +43,10 @@ void set_pixel(unsigned short x, unsigned short y, unsigned short color){
 }
 
 struct ball_status{
+    unsigned short x;
     unsigned short y;
     bool is_up;
+    bool is_left;
 };
 
 
@@ -64,8 +66,8 @@ int main(void){
         set_pixel(x-2+i, BAR_HEIGHT, 0xFFFF);
     }
 
-    struct ball_status bs = {0, false};
-    set_pixel(MODE3_WIDTH/2, bs.y, 0xFFFF);
+    struct ball_status bs = {MODE3_WIDTH/2, MODE3_WIDTH, false, false};
+    set_pixel(bs.x, bs.y, 0xFFFF);
 
     for(int i=0; i<2; i++){
         for(int j=0; j<3; j++){
@@ -90,13 +92,21 @@ int main(void){
         if((bs.is_up && bs.y == 0) || (!bs.is_up && bs.y == MODE3_HEIGHT-1)){
             bs.is_up = !bs.is_up;
         }
-        set_pixel(MODE3_WIDTH/2, bs.y, 0x0);
+        if((bs.is_left && bs.x == 0) || (!bs.is_left && bs.x == MODE3_WIDTH-1)){
+            bs.is_left = !bs.is_left;
+        }
+        set_pixel(bs.x, bs.y, 0x0);
         if(bs.is_up){
             bs.y--;
         }else{
             bs.y++;
         }
-        set_pixel(MODE3_WIDTH/2, bs.y, 0xFFFF);
+        if(bs.is_left){
+            bs.x--;
+        }else{
+            bs.x++;
+        }
+        set_pixel(bs.x, bs.y, 0xFFFF);
 
         // if Right is pressed
         if (is_pressed(BUTTON_RIGHT, buttons) && x < 237) {
