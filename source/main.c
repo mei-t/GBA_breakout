@@ -22,8 +22,13 @@
 #define MODE3_WIDTH 240
 #define MODE3_HEIGHT 160
 
-/* Height of the bar */
-#define BAR_HEIGHT 140
+/* Size of game screen */
+#define GAME_WIDTH 160
+
+/* Length of the pad */
+#define PAD_LENGTH 9
+/* Height of the pad */
+#define PAD_HEIGHT 140
 
 /* Wait for vertical sync */
 void wait_vsync() {
@@ -42,6 +47,18 @@ void set_pixel(unsigned short x, unsigned short y, unsigned short color){
     return;
 }
 
+/* Draw default screen. */
+void init(){
+    for(int i=0; i<MODE3_HEIGHT-1; i++){
+        set_pixel(0, i, 0xFFFF);
+        set_pixel(GAME_WIDTH, i, 0xFFFF);
+    }
+    for(int i=0; i<GAME_WIDTH+1; i++){
+        set_pixel(i, 0, 0xFFFF);
+        set_pixel(i, MODE3_HEIGHT-1, 0xFFFF);
+    }
+}
+
 struct ball_status{
     unsigned short x;
     unsigned short y;
@@ -49,6 +66,70 @@ struct ball_status{
     bool is_left;
 };
 
+/* Delete the block which the ball hit. */
+void delete_block(unsigned short x, unsigned short y, unsigned short color){
+    if(VRAM[y * MODE3_WIDTH + x] != color){
+        return;
+    }
+    set_pixel(x, y, color);
+    delete_block(x-1, y, color);
+    delete_block(x, y-1, color);
+    delete_block(x+1, y, color);
+    delete_block(x, y+1, color);
+}
+
+bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left){
+    is_left ? x-- : x++;
+    unsigned short next_color = VRAM[y*MODE3_WIDTH + x];
+    if(next_color == 0x0){
+        return false;
+    }
+    if(next_color != 0xFFFF){
+        delete_block(x, y, next_color);
+    }
+    return true;
+}
+bool can_go_vertical(unsigned short x, unsigned short y, bool is_up){
+    is_up ? y-- : y++;
+    unsigned short next_color = VRAM[y*MODE3_WIDTH + x];
+    if(next_color == 0x0){
+        return false;
+    }
+    if(next_color != 0xFFFF){
+        delete_block(x, y, next_color);
+    }
+    return true;
+}
+void check_next(struct ball_status *bs){
+    unsigned short next_x = bs->x;
+    unsigned short next_y = bs->y;
+    bs->is_up ? next_y-- : next_y++;
+    bs->is_left ? next_x-- : next_x++;
+    unsigned short next_color = VRAM[next_y * MODE3_WIDTH + next_x];
+    if(next_color == 0x0){
+        return;
+    }
+    if(next_color != 0xFFFF){
+        delete_block(next_x, next_y, next_color);
+    }
+    bs->is_left = !bs->is_left;
+    bs->is_up = !bs->is_up;
+}
+
+void define_ball_orbit(struct ball_status *bs){ // Reference is invalid. Why?
+    bool is_straight = true;
+    if(can_go_horizontal(bs->x, bs->y, bs->is_left)){
+        bs->is_left = !bs->is_left;
+        is_straight = false;
+    }
+    if(can_go_vertical(bs->x, bs->y, bs->is_up)){
+        bs->is_up = !bs->is_up;
+        is_straight = false;
+    }
+    if(is_straight){
+        check_next(bs);
+    }
+}
 
 int main(void){
     volatile char *ioreg = (char *)0x04000000;
@@ -61,17 +142,19 @@ int main(void){
     // vram[80*240 + 120] = 0x03E0; // X = 120, Y = 80, C = 000001111100000 = G
     // vram[80*240 + 125] = 0x7C00; // X = 125, Y = 80, C = 111110000000000 = B
 
+    init();
+
     int x = 120;
-    for(int i=0; i<5; i++){
-        set_pixel(x-2+i, BAR_HEIGHT, 0xFFFF);
+    for(int i=0; i<PAD_LENGTH; i++){
+        set_pixel(x-PAD_LENGTH/2+i, PAD_HEIGHT, 0xFFFF);
     }
 
-    struct ball_status bs = {MODE3_WIDTH/2, MODE3_WIDTH, true, false};
+    struct ball_status bs = {GAME_WIDTH/2, MODE3_HEIGHT/2, true, false};
     set_pixel(bs.x, bs.y, 0xFFFF);
 
     for(int i=0; i<2; i++){
         for(int j=0; j<3; j++){
-            set_pixel(j, 2+i, 0x7C00);
+            set_pixel(2+j, 2+i, 0x7C00);
         }
     }
     // for(int i=0; i<10; i++){
@@ -85,43 +168,26 @@ int main(void){
 
     // Wait forever
     while(1){
-        // unsigned short color = 0x001F;
         char buttons = ioreg[0x130];
-        // vram[80*240 + x] = 0x0;
 
-        if((bs.is_up && bs.y == 0) || (!bs.is_up && bs.y == MODE3_HEIGHT-1)){
-            bs.is_up = !bs.is_up;
-        }
-        if((bs.is_left && bs.x == 0) || (!bs.is_left && bs.x == MODE3_WIDTH-1)){
-            bs.is_left = !bs.is_left;
-        }
+        define_ball_orbit(&bs);
         set_pixel(bs.x, bs.y, 0x0);
-        // set_pixel(MODE3_WIDTH/2, bs.y, 0x0);
-        if(bs.is_up){
-            bs.y--;
-        }else{
-            bs.y++;
-        }
-        if(bs.is_left){
-            bs.x--;
-        }else{
-            bs.x++;
-        }
+        bs.is_up ? bs.y-- : bs.y++;
+        bs.is_left ? bs.x-- : bs.x++;
         set_pixel(bs.x, bs.y, 0xFFFF);
-        // set_pixel(MODE3_WIDTH/2, bs.y, 0xFFFF);
 
         // if Right is pressed
-        if (is_pressed(BUTTON_RIGHT, buttons) && x < 237) {
-            set_pixel(x-2, BAR_HEIGHT, 0x0);
+        if (is_pressed(BUTTON_RIGHT, buttons) && x < GAME_WIDTH - PAD_LENGTH/2 - 1) {
+            set_pixel(x-PAD_LENGTH/2, PAD_HEIGHT, 0x0);
             x++;
-            set_pixel(x+2, BAR_HEIGHT, 0xFFFF);
+            set_pixel(x+PAD_LENGTH/2, PAD_HEIGHT, 0xFFFF);
         }
 
         // if Left is pressed
-        if (is_pressed(BUTTON_LEFT, buttons) && x > 2) {
-            set_pixel(x+2, BAR_HEIGHT, 0x0);
+        if (is_pressed(BUTTON_LEFT, buttons) && x > PAD_LENGTH/2 + 1) {
+            set_pixel(x+PAD_LENGTH/2, PAD_HEIGHT, 0x0);
             x--;
-            set_pixel(x-2, BAR_HEIGHT, 0xFFFF);
+            set_pixel(x-PAD_LENGTH/2, PAD_HEIGHT, 0xFFFF);
         }
 
         // vram[80*240 + x] = 0xFFFF; // X = x, Y = 80, C = 111111111111 = W
