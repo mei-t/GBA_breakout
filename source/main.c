@@ -28,7 +28,7 @@
 #define BLOCK_LENGTH 4
 #define BLOCK_HEIGHT 3
 /* Length of the pad */
-#define PAD_LENGTH 9
+#define PAD_LENGTH 15
 /* Height of the pad */
 #define PAD_HEIGHT 140
 
@@ -69,8 +69,9 @@ void init(){
         set_pixel(i, MODE3_HEIGHT-1, 0xFFFF);
     }
 
-    for(int i=1; i<11; i++){
-        for(int j=1; j<4; j++){
+    // Draw blocks.
+    for(int i=1; i<21; i++){
+        for(int j=1; j<6; j++){
             draw_block(i*5-1, j*4, 0x7C00);
         }
     }
