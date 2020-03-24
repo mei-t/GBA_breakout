@@ -89,7 +89,7 @@ void delete_block(unsigned short x, unsigned short y, unsigned short color){
     if(VRAM[y * MODE3_WIDTH + x] != color){
         return;
     }
-    set_pixel(x, y, color);
+    set_pixel(x, y, 0x0);
     delete_block(x-1, y, color);
     delete_block(x, y-1, color);
     delete_block(x+1, y, color);
