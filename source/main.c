@@ -24,7 +24,9 @@
 
 /* Size of game screen */
 #define GAME_WIDTH 160
-
+/* Size of a block */
+#define BLOCK_LENGTH 4
+#define BLOCK_HEIGHT 3
 /* Length of the pad */
 #define PAD_LENGTH 9
 /* Height of the pad */
@@ -47,6 +49,15 @@ void set_pixel(unsigned short x, unsigned short y, unsigned short color){
     return;
 }
 
+/* Draw a block. */
+void draw_block(unsigned short x, unsigned short y, unsigned short color){
+    for(int i=0; i<BLOCK_HEIGHT; i++){
+        for(int j=0; j<BLOCK_LENGTH; j++){
+            set_pixel(x+j, y+i, color);
+        }
+    }
+}
+
 /* Draw default screen. */
 void init(){
     for(int i=0; i<MODE3_HEIGHT-1; i++){
@@ -56,6 +67,12 @@ void init(){
     for(int i=0; i<GAME_WIDTH+1; i++){
         set_pixel(i, 0, 0xFFFF);
         set_pixel(i, MODE3_HEIGHT-1, 0xFFFF);
+    }
+
+    for(int i=1; i<11; i++){
+        for(int j=1; j<4; j++){
+            draw_block(i*5-1, j*4, 0x7C00);
+        }
     }
 }
 
@@ -152,11 +169,6 @@ int main(void){
     struct ball_status bs = {GAME_WIDTH/2, MODE3_HEIGHT/2, true, false};
     set_pixel(bs.x, bs.y, 0xFFFF);
 
-    for(int i=0; i<2; i++){
-        for(int j=0; j<3; j++){
-            set_pixel(2+j, 2+i, 0x7C00);
-        }
-    }
     // for(int i=0; i<10; i++){
     //     for(int j=0; j<3; j++){
     //         for(int k=0; k<2; k++){
