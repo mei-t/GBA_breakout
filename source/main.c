@@ -28,8 +28,21 @@
 /* Height of the pad */
 #define PAD_HEIGHT 140
 /* The number of blocks */
-#define SIDEWAYS_BLOCKS 5
-#define LENGTHWAYS_BLOCKS 2
+#define SIDEWAYS_BLOCKS 8
+#define LENGTHWAYS_BLOCKS 3
+
+int number[10][7] = {
+    {1, 0, 1, 1, 1, 1, 1},
+    {0, 0, 0, 0, 1, 0, 1},
+    {1, 1, 1, 0, 1, 1, 0},
+    {1, 1, 1, 0, 1, 0, 1},
+    {0, 1, 0, 1, 1, 0, 1},
+    {1, 1, 1, 1, 0, 0, 1},
+    {1, 1, 1, 1, 0, 1, 1},
+    {1, 0, 0, 0, 1, 0, 1},
+    {1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 0, 1}
+};
 
 /* Wait for vertical sync */
 void wait_vsync() {
@@ -58,7 +71,47 @@ void draw_block(unsigned short x, unsigned short y, unsigned short color){
 }
 
 /* Draw score on screen. */
-void draw_score(int score){}
+void draw_score(int score){
+    int digit = 0;
+    do{
+        int num = score % 10;
+        for(int i=0; i<3; i++){
+            if(number[num][i]){
+                for(int j=0; j<5; j++){
+                    set_pixel(191 - digit*10 + j, 140 + i*6, 0xFFFF);
+                }
+            }else{
+                for(int j=0; j<5; j++){
+                    set_pixel(191 - digit*10 + j, 140 + i*6, 0x0);
+                }
+            }
+        }
+        for(int i=3; i<5; i++){
+            if(number[num][i]){
+                for(int j=0; j<5; j++){
+                    set_pixel(190 - digit*10 + (i-3)*6, 141 + j, 0xFFFF);
+                }
+            }else{
+                for(int j=0; j<5; j++){
+                    set_pixel(190 - digit*10 + (i-3)*6, 141 + j, 0x0);
+                }
+            }
+        }
+        for(int i=5; i<7; i++){
+            if(number[num][i]){
+                for(int j=0; j<5; j++){
+                    set_pixel(190 - digit*10 + (i-5)*6, 147 + j, 0xFFFF);
+                }
+            }else{
+                for(int j=0; j<5; j++){
+                    set_pixel(190 - digit*10 + (i-5)*6, 147 + j, 0x0);
+                }
+            }
+        }
+        score /= 10;
+        digit++;
+    }while(score != 0);
+}
 
 /* Draw default screen. */
 void init(int *score, int pad_x){
@@ -81,6 +134,22 @@ void init(int *score, int pad_x){
     // Draw a pad.
     for(int i=0; i<PAD_LENGTH; i++){
         set_pixel(pad_x-PAD_LENGTH/2+i, PAD_HEIGHT, 0xFFFF);
+    }
+
+    // Draw "SCORE" on screen.
+    int score_letter[5][19] = {
+        {1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1},
+        {1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0},
+        {1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1},
+        {0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0},
+        {1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1}
+    };
+    for(int i=0; i<5; i++){
+        for(int j=0; j<19; j++){
+            if(score_letter[i][j]){
+                set_pixel(j+170, i+130, 0xFFFF);
+            }
+        }
     }
 
     draw_score(*score);
@@ -185,7 +254,7 @@ int main(void){
     int pad_x = GAME_WIDTH/2;
     init(&score, pad_x);
     
-    struct ball_status bs = {GAME_WIDTH/2, MODE3_HEIGHT/2, true, false};
+    struct ball_status bs = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false};
     set_pixel(bs.x, bs.y, 0xFFFF);
 
     // Wait forever
