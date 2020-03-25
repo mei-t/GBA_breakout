@@ -18,10 +18,6 @@
 /* Video memory */
 #define VRAM ((volatile unsigned short *)0x06000000)
 
-/* Size in pixels of screen in mode 3 */
-#define MODE3_WIDTH 240
-#define MODE3_HEIGHT 160
-
 /* Size of game screen */
 #define GAME_WIDTH 160
 /* Size of a block */
@@ -31,6 +27,9 @@
 #define PAD_LENGTH 15
 /* Height of the pad */
 #define PAD_HEIGHT 140
+/* The number of blocks */
+#define SIDEWAYS_BLOCKS 20
+#define LENGTHWAYS_BLOCKS 5
 
 /* Wait for vertical sync */
 void wait_vsync() {
@@ -58,8 +57,11 @@ void draw_block(unsigned short x, unsigned short y, unsigned short color){
     }
 }
 
+/* Draw score on screen. */
+void draw_score(int score){}
+
 /* Draw default screen. */
-void init(){
+void init(int *score){
     for(int i=0; i<MODE3_HEIGHT-1; i++){
         set_pixel(0, i, 0xFFFF);
         set_pixel(GAME_WIDTH, i, 0xFFFF);
@@ -70,11 +72,12 @@ void init(){
     }
 
     // Draw blocks.
-    for(int i=1; i<21; i++){
-        for(int j=1; j<6; j++){
+    for(int i=1; i<=SIDEWAYS_BLOCKS; i++){
+        for(int j=1; j<=LENGTHWAYS_BLOCKS; j++){
             draw_block(i*5-1, j*4, 0x7C00);
         }
     }
+    draw_score(*score);
 }
 
 struct ball_status{
@@ -96,29 +99,35 @@ void delete_block(unsigned short x, unsigned short y, unsigned short color){
     delete_block(x, y+1, color);
 }
 
-bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left){
+void hit_block(unsigned short x, unsigned short y, unsigned short color, int *score){
+    delete_block(x, y, color);
+    score++;
+    draw_score(*score);
+}
+
+bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, int* score){
     is_left ? x-- : x++;
     unsigned short next_color = VRAM[y*MODE3_WIDTH + x];
     if(next_color == 0x0){
         return false;
     }
     if(next_color != 0xFFFF){
-        delete_block(x, y, next_color);
+        hit_block(x, y, next_color, score);
     }
     return true;
 }
-bool can_go_vertical(unsigned short x, unsigned short y, bool is_up){
+bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, int *score){
     is_up ? y-- : y++;
     unsigned short next_color = VRAM[y*MODE3_WIDTH + x];
     if(next_color == 0x0){
         return false;
     }
     if(next_color != 0xFFFF){
-        delete_block(x, y, next_color);
+        hit_block(x, y, next_color, score);
     }
     return true;
 }
-void check_next(struct ball_status *bs){
+void check_next(struct ball_status *bs, int *score){
     unsigned short next_x = bs->x;
     unsigned short next_y = bs->y;
     bs->is_up ? next_y-- : next_y++;
@@ -128,26 +137,32 @@ void check_next(struct ball_status *bs){
         return;
     }
     if(next_color != 0xFFFF){
-        delete_block(next_x, next_y, next_color);
+        hit_block(next_x, next_y, next_color, score);
     }
     bs->is_left = !bs->is_left;
     bs->is_up = !bs->is_up;
 }
 
-void define_ball_orbit(struct ball_status *bs){ // Reference is invalid. Why?
+void define_ball_orbit(struct ball_status *bs, int *score){ // Reference is invalid. Why?
     bool is_straight = true;
-    if(can_go_horizontal(bs->x, bs->y, bs->is_left)){
+    if(can_go_horizontal(bs->x, bs->y, bs->is_left, score)){
         bs->is_left = !bs->is_left;
         is_straight = false;
     }
-    if(can_go_vertical(bs->x, bs->y, bs->is_up)){
+    if(can_go_vertical(bs->x, bs->y, bs->is_up, score)){
         bs->is_up = !bs->is_up;
         is_straight = false;
     }
     if(is_straight){
-        check_next(bs);
+        check_next(bs, score);
     }
 }
+
+/* Draw "GAME OVER" on screen. */
+void draw_game_over(){}
+
+/* Draw "GAME CLEAR" on screen. */
+void draw_game_clear(){}
 
 int main(void){
     volatile char *ioreg = (char *)0x04000000;
@@ -160,7 +175,8 @@ int main(void){
     // vram[80*240 + 120] = 0x03E0; // X = 120, Y = 80, C = 000001111100000 = G
     // vram[80*240 + 125] = 0x7C00; // X = 125, Y = 80, C = 111110000000000 = B
 
-    init();
+    int *score = 0;
+    init(score);
 
     int x = 120;
     for(int i=0; i<PAD_LENGTH; i++){
@@ -170,20 +186,18 @@ int main(void){
     struct ball_status bs = {GAME_WIDTH/2, MODE3_HEIGHT/2, true, false};
     set_pixel(bs.x, bs.y, 0xFFFF);
 
-    // for(int i=0; i<10; i++){
-    //     for(int j=0; j<3; j++){
-    //         for(int k=0; k<2; k++){
-    //             vram[2*240 + i]
-    //         }
-    //     }
-    // }
-
-
     // Wait forever
     while(1){
+        if(bs.y != MODE3_HEIGHT-2){
+            draw_game_over();
+            break;
+        }else if(*score == SIDEWAYS_BLOCKS * LENGTHWAYS_BLOCKS){
+            draw_game_clear();
+            break;
+        }
         char buttons = ioreg[0x130];
 
-        define_ball_orbit(&bs);
+        define_ball_orbit(&bs, score);
         set_pixel(bs.x, bs.y, 0x0);
         bs.is_up ? bs.y-- : bs.y++;
         bs.is_left ? bs.x-- : bs.x++;
