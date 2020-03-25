@@ -21,15 +21,15 @@
 /* Size of game screen */
 #define GAME_WIDTH 160
 /* Size of a block */
-#define BLOCK_LENGTH 4
-#define BLOCK_HEIGHT 3
+#define BLOCK_LENGTH 10
+#define BLOCK_HEIGHT 8
 /* Length of the pad */
-#define PAD_LENGTH 15
+#define PAD_LENGTH 35
 /* Height of the pad */
 #define PAD_HEIGHT 140
 /* The number of blocks */
-#define SIDEWAYS_BLOCKS 20
-#define LENGTHWAYS_BLOCKS 5
+#define SIDEWAYS_BLOCKS 5
+#define LENGTHWAYS_BLOCKS 2
 
 /* Wait for vertical sync */
 void wait_vsync() {
@@ -74,7 +74,7 @@ void init(int *score, int pad_x){
     // Draw blocks.
     for(int i=1; i<=SIDEWAYS_BLOCKS; i++){
         for(int j=1; j<=LENGTHWAYS_BLOCKS; j++){
-            draw_block(i*5-1, j*4, 0x7C00);
+            draw_block(i*(BLOCK_LENGTH+5)-1, j*(BLOCK_HEIGHT+5), 0x7C00);
         }
     }
 
@@ -107,7 +107,7 @@ void delete_block(unsigned short x, unsigned short y, unsigned short color){
 
 void hit_block(unsigned short x, unsigned short y, unsigned short color, int *score){
     delete_block(x, y, color);
-    score++;
+    (*score)++;
     draw_score(*score);
 }
 
