@@ -70,43 +70,37 @@ void draw_block(unsigned short x, unsigned short y, unsigned short color){
     }
 }
 
+/* Draw a line which is a part of number. */
+void draw_line(unsigned short x, unsigned short y, bool is_white, bool is_sideway){
+    unsigned short color;
+    if(is_white){
+        color = 0xFFFF;
+    }else{
+        color = 0x0;
+    }
+
+    for(int i=0; i<5; i++){
+        if(is_sideway){
+            set_pixel(x + i, y, color);
+        }else{
+            set_pixel(x, y + i, color);
+        }
+    }
+}
+
 /* Draw score on screen. */
 void draw_score(int score){
     int digit = 0;
     do{
         int num = score % 10;
         for(int i=0; i<3; i++){
-            if(number[num][i]){
-                for(int j=0; j<5; j++){
-                    set_pixel(191 - digit*10 + j, 140 + i*6, 0xFFFF);
-                }
-            }else{
-                for(int j=0; j<5; j++){
-                    set_pixel(191 - digit*10 + j, 140 + i*6, 0x0);
-                }
-            }
+            draw_line(191 - digit * 10, 140 + i * 6, number[num][i], true);
         }
         for(int i=3; i<5; i++){
-            if(number[num][i]){
-                for(int j=0; j<5; j++){
-                    set_pixel(190 - digit*10 + (i-3)*6, 141 + j, 0xFFFF);
-                }
-            }else{
-                for(int j=0; j<5; j++){
-                    set_pixel(190 - digit*10 + (i-3)*6, 141 + j, 0x0);
-                }
-            }
+            draw_line(190 - digit * 10 + (i - 3) * 6, 141, number[num][i], false);
         }
         for(int i=5; i<7; i++){
-            if(number[num][i]){
-                for(int j=0; j<5; j++){
-                    set_pixel(190 - digit*10 + (i-5)*6, 147 + j, 0xFFFF);
-                }
-            }else{
-                for(int j=0; j<5; j++){
-                    set_pixel(190 - digit*10 + (i-5)*6, 147 + j, 0x0);
-                }
-            }
+            draw_line(190 - digit * 10 + (i - 5) * 6, 147, number[num][i], false);
         }
         score /= 10;
         digit++;
