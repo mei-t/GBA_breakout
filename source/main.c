@@ -44,6 +44,21 @@ int number[10][7] = {
     {1, 1, 1, 1, 1, 0, 1}
 };
 
+int letter_g[12][9] = {
+    {0, 0, 1, 1, 1, 1, 1, 0, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 0},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 1, 1, 1, 1},
+    {1, 1, 1, 0, 0, 1, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {0, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 0, 1, 1, 1, 1, 1, 0, 0}
+};
+
 /* Wait for vertical sync */
 void wait_vsync() {
     while (REG_VCOUNT >= MODE3_HEIGHT);
@@ -228,7 +243,21 @@ void define_ball_orbit(struct ball_status *bs, int *score){ // Reference is inva
 }
 
 /* Draw "GAME OVER" on screen. */
-void draw_game_over(){}
+void draw_game_over(){
+    for(int i=1; i<GAME_WIDTH; i++){
+        set_pixel(i, MODE3_HEIGHT/2 - 7, 0xFFFF);
+        set_pixel(i, MODE3_HEIGHT/2 - 6, 0xFFFF);
+        set_pixel(i, MODE3_HEIGHT/2 + 7, 0xFFFF);
+        set_pixel(i, MODE3_HEIGHT/2 + 8, 0xFFFF);
+    }
+    for(int i=1; i<45; i++){
+        for(int j=0; j<12; j++){
+            set_pixel(i, MODE3_HEIGHT/2 - 5 + j, 0xFFFF);
+            set_pixel(160 - i, MODE3_HEIGHT/2 - 5 + j, 0xFFFF);
+        }
+    }
+    int start_pos[8] = {45, 56, 67, 78, 84, 95, 106, 117};
+}
 
 /* Draw "GAME CLEAR" on screen. */
 void draw_game_clear(){}
