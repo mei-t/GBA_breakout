@@ -1,5 +1,9 @@
 #include "game.h"
 
+bool is_pressed(unsigned short BUTTON, unsigned short buttons){
+    return (BUTTON & buttons) == 0;
+}
+
 void hit_block(unsigned short x, unsigned short y, unsigned short color, int *score){
     delete_block(x, y, color);
     (*score)++;

@@ -10,6 +10,9 @@ struct ball_status{
     bool is_left;
 };
 
+/* If the button pressed or not. */
+bool is_pressed(unsigned short BUTTON, unsigned short buttons);
+
 void hit_block(unsigned short x, unsigned short y, unsigned short color, int *score);
 
 bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, int* score);

@@ -67,10 +67,10 @@ void wait_vsync() {
     while (REG_VCOUNT < MODE3_HEIGHT);
 }
 
-/* If the button pressed or not. */
-bool is_pressed(unsigned short BUTTON, unsigned short buttons){
-    return (BUTTON & buttons) == 0;
-}
+// /* If the button pressed or not. */
+// bool is_pressed(unsigned short BUTTON, unsigned short buttons){
+//     return (BUTTON & buttons) == 0;
+// }
 
 // /* Set a pixel. */
 // void set_pixel(unsigned short x, unsigned short y, unsigned short color){
