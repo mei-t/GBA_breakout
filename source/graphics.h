@@ -26,6 +26,9 @@
 #define SIDEWAYS_BLOCKS 8
 #define LENGTHWAYS_BLOCKS 3
 
+int number[10][7];
+int letter_g[12][9];
+
 /* Set a pixel. */
 void set_pixel(unsigned short x, unsigned short y, unsigned short color);
 
