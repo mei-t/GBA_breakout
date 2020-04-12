@@ -11,6 +11,4 @@ Just do `$ make`.
 
 
 ## How to run  
-```
-$ [PATH]/mgba GBA_breakout.gba
-```
+Run `GBA_breakout.gba` with your favorite GBA emulator.
