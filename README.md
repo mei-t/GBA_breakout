@@ -3,7 +3,7 @@ This is a breakout working on Game Boy Advance.
 
 
 ## Requirement  
-Download devkitPro : <https://github.com/devkitPro/installer/releases>
+Download devkitPro : <https://devkitpro.org/wiki/Getting_Started>
 
 
 ## How to compile  
