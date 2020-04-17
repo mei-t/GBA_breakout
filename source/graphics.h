@@ -26,6 +26,24 @@
 #define SIDEWAYS_BLOCKS 8
 #define LENGTHWAYS_BLOCKS 3
 
+struct ball_status{
+    unsigned short x;
+    unsigned short y;
+    bool is_up;
+    bool is_left;
+};
+
+struct pad_status {
+    unsigned short x;
+    unsigned short y;
+};
+
+struct game_state {
+    bool block[SIDEWAYS_BLOCKS][LENGTHWAYS_BLOCKS];
+    struct ball_status ball;
+    struct pad_status pad;
+    unsigned int score;
+};
 
 /* Set a pixel. */
 void set_pixel(unsigned short x, unsigned short y, unsigned short color);
@@ -39,16 +57,27 @@ void draw_line(unsigned short x, unsigned short y, bool is_white, bool is_sidewa
 /* Draw score on screen. */
 void draw_score(int score);
 
-/* Draw default screen. */
-void init(int *score, int pad_x);
 
 /* Delete the block which the ball hit. */
 void delete_block(unsigned short x, unsigned short y, unsigned short color);
 
-/* Draw "GAME OVER" on screen. */
-void draw_game_over();
 
-/* Draw "GAME CLEAR" on screen. */
-void draw_game_clear();
+
+/* Draw the initial screen */
+void gfx_init(const struct game_state* state);
+// /* Erase a block */
+// void gfx_delete_block(unsigned short x, unsigned short y);
+// /* Erase the ball from its old position and draw in the new one */
+// void gfx_update_ball(const struct ball_status* ball_state);
+// /* Erase the pad from its old position and draw in the new one */
+// void gfx_update_pad(const struct pad_status* pad_state);
+// /* Draw the new score */
+// void gfx_update_score(unsigned int score);
+
+/* Draw the game over screen */
+void gfx_draw_game_over();
+
+/* Draw the game clear screen */
+void gfx_draw_game_clear();
 
 #endif

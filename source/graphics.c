@@ -76,7 +76,7 @@ void draw_score(int score){
     }while(score != 0);
 }
 
-void init(int *score, int pad_x){
+void gfx_init(const struct game_state* state){
     for(int i=0; i<MODE3_HEIGHT-1; i++){
         set_pixel(0, i, 0xFFFF);
         set_pixel(GAME_WIDTH, i, 0xFFFF);
@@ -89,13 +89,15 @@ void init(int *score, int pad_x){
     // Draw blocks.
     for(int i=1; i<=SIDEWAYS_BLOCKS; i++){
         for(int j=1; j<=LENGTHWAYS_BLOCKS; j++){
-            draw_block(i*(BLOCK_LENGTH+5)-1, j*(BLOCK_HEIGHT+5), 0x7C00);
+            if(state->block[i][j]){
+                draw_block(i*(BLOCK_LENGTH+5)-1, j*(BLOCK_HEIGHT+5), 0x7C00);
+            }
         }
     }
 
     // Draw a pad.
     for(int i=0; i<PAD_LENGTH; i++){
-        set_pixel(pad_x-PAD_LENGTH/2+i, PAD_HEIGHT, 0xFFFF);
+        set_pixel(state->pad.x-PAD_LENGTH/2+i, state->pad.y, 0xFFFF);
     }
 
     // Draw "SCORE" on screen.
@@ -114,7 +116,9 @@ void init(int *score, int pad_x){
         }
     }
 
-    draw_score(*score);
+    draw_score(state->score);
+
+    set_pixel(state->ball.x, state->ball.y, 0xFFFF);
 }
 
 void delete_block(unsigned short x, unsigned short y, unsigned short color){
@@ -128,7 +132,7 @@ void delete_block(unsigned short x, unsigned short y, unsigned short color){
     delete_block(x, y+1, color);
 }
 
-void draw_game_over(){
+void gfx_draw_game_over(){
     for(int i=1; i<GAME_WIDTH; i++){
         set_pixel(i, MODE3_HEIGHT/2 - 7, 0xFFFF);
         set_pixel(i, MODE3_HEIGHT/2 - 6, 0xFFFF);
@@ -144,4 +148,4 @@ void draw_game_over(){
     int start_pos[8] = {45, 56, 67, 78, 84, 95, 106, 117};
 }
 
-void draw_game_clear(){}
+void gfx_draw_game_clear(){}

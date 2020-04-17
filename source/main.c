@@ -31,43 +31,43 @@ int main(void){
     // vram[80*240 + 125] = 0x7C00; // X = 125, Y = 80, C = 111110000000000 = B
 
     int score = 0;
-    int pad_x = GAME_WIDTH/2;
-    init(&score, pad_x);
-    
-    struct ball_status bs = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false};
-    set_pixel(bs.x, bs.y, 0xFFFF);
+    bool block[SIDEWAYS_BLOCKS][LENGTHWAYS_BLOCKS] = { { true } };
+    // struct ball_status ball = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false};
+    // struct pad_status pad = {GAME_WIDTH/2, PAD_HEIGHT};
+    struct game_state state = { .block = {{block}}, .ball = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false}, .pad = {GAME_WIDTH/2, PAD_HEIGHT}, 0};
+    gfx_init(&state);
 
     // Wait forever
     while(1){
-        if(bs.y == MODE3_HEIGHT-2){
-            draw_game_over();
+        if(state.ball.y == MODE3_HEIGHT-2){
+            gfx_draw_game_over();
             break;
         }else if(score == SIDEWAYS_BLOCKS * LENGTHWAYS_BLOCKS){
             // set_pixel(25, 25, 0x7C00); // brue
-            draw_game_clear();
+            gfx_draw_game_clear();
             break;
         }
 
         char buttons = ioreg[0x130];
 
-        define_ball_orbit(&bs, &score);
-        set_pixel(bs.x, bs.y, 0x0);
-        bs.is_up ? bs.y-- : bs.y++;
-        bs.is_left ? bs.x-- : bs.x++;
-        set_pixel(bs.x, bs.y, 0xFFFF);
+        define_ball_orbit(&(state.ball), &score);
+        set_pixel(state.ball.x, state.ball.y, 0x0);
+        state.ball.is_up ? state.ball.y-- : state.ball.y++;
+        state.ball.is_left ? state.ball.x-- : state.ball.x++;
+        set_pixel(state.ball.x, state.ball.y, 0xFFFF);
 
         // if Right is pressed
-        if (is_pressed(BUTTON_RIGHT, buttons) && pad_x < GAME_WIDTH - PAD_LENGTH/2 - 1) {
-            set_pixel(pad_x-PAD_LENGTH/2, PAD_HEIGHT, 0x0);
-            pad_x++;
-            set_pixel(pad_x+PAD_LENGTH/2, PAD_HEIGHT, 0xFFFF);
+        if (is_pressed(BUTTON_RIGHT, buttons) && state.pad.x < GAME_WIDTH - PAD_LENGTH/2 - 1) {
+            set_pixel(state.pad.x-PAD_LENGTH/2, PAD_HEIGHT, 0x0);
+            state.pad.x++;
+            set_pixel(state.pad.x+PAD_LENGTH/2, PAD_HEIGHT, 0xFFFF);
         }
 
         // if Left is pressed
-        if (is_pressed(BUTTON_LEFT, buttons) && pad_x > PAD_LENGTH/2 + 1) {
-            set_pixel(pad_x+PAD_LENGTH/2, PAD_HEIGHT, 0x0);
-            pad_x--;
-            set_pixel(pad_x-PAD_LENGTH/2, PAD_HEIGHT, 0xFFFF);
+        if (is_pressed(BUTTON_LEFT, buttons) && state.pad.x > PAD_LENGTH/2 + 1) {
+            set_pixel(state.pad.x+PAD_LENGTH/2, PAD_HEIGHT, 0x0);
+            state.pad.x--;
+            set_pixel(state.pad.x-PAD_LENGTH/2, PAD_HEIGHT, 0xFFFF);
         }
 
         // vram[80*240 + x] = 0xFFFF; // X = x, Y = 80, C = 111111111111 = W

@@ -3,13 +3,6 @@
 
 #include "graphics.h"
 
-struct ball_status{
-    unsigned short x;
-    unsigned short y;
-    bool is_up;
-    bool is_left;
-};
-
 /* If the button pressed or not. */
 bool is_pressed(unsigned short BUTTON, unsigned short buttons);
 
