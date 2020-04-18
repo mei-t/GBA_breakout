@@ -26,22 +26,33 @@
 #define SIDEWAYS_BLOCKS 8
 #define LENGTHWAYS_BLOCKS 3
 
-struct ball_status{
-    unsigned short x;
-    unsigned short y;
-    bool is_up;
-    bool is_left;
-};
+// struct ball_status{
+//     unsigned short x;
+//     unsigned short y;
+//     bool is_up;
+//     bool is_left;
+// };
 
-struct pad_status {
-    unsigned short x;
-    unsigned short y;
-};
+// struct pad_status {
+//     unsigned short x;
+//     unsigned short y;
+// };
 
 struct game_state {
     bool block[SIDEWAYS_BLOCKS][LENGTHWAYS_BLOCKS];
-    struct ball_status ball;
-    struct pad_status pad;
+
+    struct ball_status{
+        unsigned short x;
+        unsigned short y;
+        bool is_up;
+        bool is_left;
+    } ball;
+
+    struct pad_status {
+        unsigned short x;
+        unsigned short y;
+    } pad;
+
     unsigned int score;
 };
 
