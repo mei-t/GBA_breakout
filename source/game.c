@@ -44,7 +44,7 @@ void check_next(struct game_state* state){
         return;
     }
     if(next_color != 0xFFFF){
-        hit_block(next_x, next_y, next_color, state->score);
+        hit_block(next_x, next_y, next_color, &state->score);
     }
     state->ball.is_left = !state->ball.is_left;
     state->ball.is_up = !state->ball.is_up;
@@ -52,11 +52,11 @@ void check_next(struct game_state* state){
 
 void define_ball_orbit(struct game_state* state){ // Reference is invalid. Why?
     bool is_straight = true;
-    if(can_go_horizontal(state->ball.x, state->ball.y, state->ball.is_left, state->score)){
+    if(can_go_horizontal(state->ball.x, state->ball.y, state->ball.is_left,&state->score)){
         state->ball.is_left = !state->ball.is_left;
         is_straight = false;
     }
-    if(can_go_vertical(state->ball.x, state->ball.y, state->ball.is_up, state->score)){
+    if(can_go_vertical(state->ball.x, state->ball.y, state->ball.is_up, &state->score)){
         state->ball.is_up = !state->ball.is_up;
         is_straight = false;
     }
