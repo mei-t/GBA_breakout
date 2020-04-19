@@ -24,10 +24,6 @@ void draw_block(unsigned short x, unsigned short y, unsigned short color);
 /* Draw a line which is a part of number. */
 void draw_line(unsigned short x, unsigned short y, bool is_white, bool is_sideway);
 
-/* Draw score on screen. */
-void draw_score(int score);
-
-
 /* Delete the block which the ball hit. */
 void delete_block(unsigned short x, unsigned short y, unsigned short color);
 
@@ -41,8 +37,8 @@ void gfx_init(struct game_state* state);
 // void gfx_update_ball(const struct ball_status* ball_state);
 // /* Erase the pad from its old position and draw in the new one */
 // void gfx_update_pad(const struct pad_status* pad_state);
-// /* Draw the new score */
-// void gfx_update_score(unsigned int score);
+/* Draw the new score */
+void gfx_update_score(unsigned int score);
 
 /* Draw the game over screen */
 void gfx_draw_game_over();

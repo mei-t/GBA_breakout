@@ -58,24 +58,6 @@ void draw_line(unsigned short x, unsigned short y, bool is_white, bool is_sidewa
     }
 }
 
-void draw_score(int score){
-    int digit = 0;
-    do{
-        int num = score % 10;
-        for(int i=0; i<3; i++){
-            draw_line(191 - digit * 10, 140 + i * 6, number[num][i], true);
-        }
-        for(int i=3; i<5; i++){
-            draw_line(190 - digit * 10 + (i - 3) * 6, 141, number[num][i], false);
-        }
-        for(int i=5; i<7; i++){
-            draw_line(190 - digit * 10 + (i - 5) * 6, 147, number[num][i], false);
-        }
-        score /= 10;
-        digit++;
-    }while(score != 0);
-}
-
 void gfx_init(struct game_state* state){
     for(int i=0; i<MODE3_HEIGHT-1; i++){
         set_pixel(0, i, 0xFFFF);
@@ -135,9 +117,27 @@ void gfx_init(struct game_state* state){
         }
     }
 
-    draw_score(state->score);
+    gfx_update_score(state->score);
 
     set_pixel(state->ball.x, state->ball.y, 0xFFFF);
+}
+
+void gfx_update_score(unsigned int score){
+    int digit = 0;
+    do{
+        int num = score % 10;
+        for(int i=0; i<3; i++){
+            draw_line(191 - digit * 10, 140 + i * 6, number[num][i], true);
+        }
+        for(int i=3; i<5; i++){
+            draw_line(190 - digit * 10 + (i - 3) * 6, 141, number[num][i], false);
+        }
+        for(int i=5; i<7; i++){
+            draw_line(190 - digit * 10 + (i - 5) * 6, 147, number[num][i], false);
+        }
+        score /= 10;
+        digit++;
+    }while(score != 0);
 }
 
 void delete_block(unsigned short x, unsigned short y, unsigned short color){

@@ -7,7 +7,7 @@ bool is_pressed(unsigned short BUTTON, unsigned short buttons){
 void hit_block(unsigned short x, unsigned short y, unsigned short color, int *score){
     delete_block(x, y, color);
     (*score)++;
-    draw_score(*score);
+    gfx_update_score(*score);
 }
 
 bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, int* score){
