@@ -31,18 +31,22 @@ int main(void){
     // vram[80*240 + 125] = 0x7C00; // X = 125, Y = 80, C = 111110000000000 = B
 
     int score = 0;
-    bool block[SIDEWAYS_BLOCKS][LENGTHWAYS_BLOCKS];
-    for(int i = 0; i < SIDEWAYS_BLOCKS; i++){
-        for(int j = 0; j < LENGTHWAYS_BLOCKS; j++){
-            block[i][j] = true;
-        }
-    }
+    // bool block[SIDEWAYS_BLOCKS][LENGTHWAYS_BLOCKS];
+    // for(int i = 0; i < SIDEWAYS_BLOCKS; i++){
+    //     for(int j = 0; j < LENGTHWAYS_BLOCKS; j++){
+    //         block[i][j] = true;
+    //     }
+    // }
     struct game_state state = {
-        .block = {{block}},
         .ball = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false},
         .pad = {GAME_WIDTH/2, PAD_HEIGHT},
         0
     };
+    for(int i = 0; i < SIDEWAYS_BLOCKS; i++){
+        for(int j = 0; j < LENGTHWAYS_BLOCKS; j++){
+            state.block[i][j] = true;
+        }
+    }
     gfx_init(&state);
 
     // Wait forever
