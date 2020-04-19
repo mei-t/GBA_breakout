@@ -76,7 +76,7 @@ void draw_score(int score){
     }while(score != 0);
 }
 
-void gfx_init(const struct game_state* state){
+void gfx_init(struct game_state* state){
     for(int i=0; i<MODE3_HEIGHT-1; i++){
         set_pixel(0, i, 0xFFFF);
         set_pixel(GAME_WIDTH, i, 0xFFFF);
@@ -85,6 +85,18 @@ void gfx_init(const struct game_state* state){
         set_pixel(i, 0, 0xFFFF);
         set_pixel(i, MODE3_HEIGHT-1, 0xFFFF);
     }
+
+    // Initialize state.
+    for(int i = 0; i < SIDEWAYS_BLOCKS; i++){
+        for(int j = 0; j < LENGTHWAYS_BLOCKS; j++){
+            state->block[i][j] = true;
+        }
+    }
+    struct ball_status ball = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false};
+    state->ball = ball;
+    struct pad_status pad = {GAME_WIDTH/2, PAD_HEIGHT};
+    state->pad = pad;
+    state->score = 0;
 
     // Draw blocks.
     for(int i=0; i<SIDEWAYS_BLOCKS; i++){

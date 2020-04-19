@@ -75,7 +75,7 @@ void delete_block(unsigned short x, unsigned short y, unsigned short color);
 
 
 /* Draw the initial screen */
-void gfx_init(const struct game_state* state);
+void gfx_init(struct game_state* state);
 // /* Erase a block */
 // void gfx_delete_block(unsigned short x, unsigned short y);
 // /* Erase the ball from its old position and draw in the new one */
