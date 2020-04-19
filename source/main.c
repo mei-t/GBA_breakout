@@ -30,7 +30,6 @@ int main(void){
     // vram[80*240 + 120] = 0x03E0; // X = 120, Y = 80, C = 000001111100000 = G
     // vram[80*240 + 125] = 0x7C00; // X = 125, Y = 80, C = 111110000000000 = B
 
-    int score = 0;
     struct game_state state;
     gfx_init(&state);
 
@@ -39,7 +38,7 @@ int main(void){
         if(state.ball.y == MODE3_HEIGHT-2){
             gfx_draw_game_over();
             break;
-        }else if(score == SIDEWAYS_BLOCKS * LENGTHWAYS_BLOCKS){
+        }else if(state.score == SIDEWAYS_BLOCKS * LENGTHWAYS_BLOCKS){
             // set_pixel(25, 25, 0x7C00); // brue
             gfx_draw_game_clear();
             break;
@@ -47,7 +46,7 @@ int main(void){
 
         char buttons = ioreg[0x130];
 
-        define_ball_orbit(&(state.ball), &score);
+        define_ball_orbit(&(state.ball), &state.score);
         set_pixel(state.ball.x, state.ball.y, 0x0);
         state.ball.is_up ? state.ball.y-- : state.ball.y++;
         state.ball.is_left ? state.ball.x-- : state.ball.x++;
