@@ -46,7 +46,7 @@ int main(void){
 
         char buttons = ioreg[0x130];
 
-        define_ball_orbit(&(state.ball), &state.score);
+        define_ball_orbit(&state);
         set_pixel(state.ball.x, state.ball.y, 0x0);
         state.ball.is_up ? state.ball.y-- : state.ball.y++;
         state.ball.is_left ? state.ball.x-- : state.ball.x++;

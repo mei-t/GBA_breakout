@@ -1,7 +1,36 @@
 #ifndef _CODE_GAME_H_
 #define _CODE_GAME_H_
 
-#include "graphics.h"
+#include <stdbool.h>
+
+/* Size in pixels of screen in mode 3 */
+#define MODE3_WIDTH 240
+#define MODE3_HEIGHT 160
+
+/* Video memory */
+#define VRAM ((volatile unsigned short *)0x06000000)
+
+/* The number of blocks */
+#define SIDEWAYS_BLOCKS 8
+#define LENGTHWAYS_BLOCKS 3
+
+struct game_state {
+    bool block[SIDEWAYS_BLOCKS][LENGTHWAYS_BLOCKS];
+
+    struct ball_state {
+        unsigned short x;
+        unsigned short y;
+        bool is_up;
+        bool is_left;
+    } ball;
+
+    struct pad_state {
+        unsigned short x;
+        unsigned short y;
+    } pad;
+
+    unsigned int score;
+};
 
 /* If the button pressed or not. */
 bool is_pressed(unsigned short BUTTON, unsigned short buttons);
@@ -12,8 +41,8 @@ bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, int* sc
 
 bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, int *score);
 
-void check_next(struct ball_status *bs, int *score);
+void check_next(struct game_state* state);
 
-void define_ball_orbit(struct ball_status *bs, int *score);
+void define_ball_orbit(struct game_state* state);
 
 #endif

@@ -92,9 +92,9 @@ void gfx_init(struct game_state* state){
             state->block[i][j] = true;
         }
     }
-    struct ball_status ball = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false};
+    struct ball_state ball = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false};
     state->ball = ball;
-    struct pad_status pad = {GAME_WIDTH/2, PAD_HEIGHT};
+    struct pad_state pad = {GAME_WIDTH/2, PAD_HEIGHT};
     state->pad = pad;
     state->score = 0;
 

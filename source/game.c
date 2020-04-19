@@ -34,33 +34,33 @@ bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, int *score)
     return true;
 }
 
-void check_next(struct ball_status *bs, int *score){
-    unsigned short next_x = bs->x;
-    unsigned short next_y = bs->y;
-    bs->is_up ? next_y-- : next_y++;
-    bs->is_left ? next_x-- : next_x++;
+void check_next(struct game_state* state){
+    unsigned short next_x = state->ball.x;
+    unsigned short next_y = state->ball.y;
+    state->ball.is_up ? next_y-- : next_y++;
+    state->ball.is_left ? next_x-- : next_x++;
     unsigned short next_color = VRAM[next_y * MODE3_WIDTH + next_x];
     if(next_color == 0x0){
         return;
     }
     if(next_color != 0xFFFF){
-        hit_block(next_x, next_y, next_color, score);
+        hit_block(next_x, next_y, next_color, state->score);
     }
-    bs->is_left = !bs->is_left;
-    bs->is_up = !bs->is_up;
+    state->ball.is_left = !state->ball.is_left;
+    state->ball.is_up = !state->ball.is_up;
 }
 
-void define_ball_orbit(struct ball_status *bs, int *score){ // Reference is invalid. Why?
+void define_ball_orbit(struct game_state* state){ // Reference is invalid. Why?
     bool is_straight = true;
-    if(can_go_horizontal(bs->x, bs->y, bs->is_left, score)){
-        bs->is_left = !bs->is_left;
+    if(can_go_horizontal(state->ball.x, state->ball.y, state->ball.is_left, state->score)){
+        state->ball.is_left = !state->ball.is_left;
         is_straight = false;
     }
-    if(can_go_vertical(bs->x, bs->y, bs->is_up, score)){
-        bs->is_up = !bs->is_up;
+    if(can_go_vertical(state->ball.x, state->ball.y, state->ball.is_up, state->score)){
+        state->ball.is_up = !state->ball.is_up;
         is_straight = false;
     }
     if(is_straight){
-        check_next(bs, score);
+        check_next(state);
     }
 }
