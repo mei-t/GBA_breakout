@@ -58,7 +58,7 @@ void draw_line(unsigned short x, unsigned short y, bool is_white, bool is_sidewa
     }
 }
 
-void gfx_init(struct game_state* state){
+void gfx_init(struct game_status* state){
     for(int i=0; i<MODE3_HEIGHT-1; i++){
         set_pixel(0, i, 0xFFFF);
         set_pixel(GAME_WIDTH, i, 0xFFFF);
@@ -74,9 +74,9 @@ void gfx_init(struct game_state* state){
             state->block[i][j] = true;
         }
     }
-    struct ball_state ball = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false};
+    struct ball_status ball = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false};
     state->ball = ball;
-    struct pad_state pad = {GAME_WIDTH/2, PAD_HEIGHT};
+    struct pad_status pad = {GAME_WIDTH/2, PAD_HEIGHT};
     state->pad = pad;
     state->score = 0;
 
@@ -120,6 +120,13 @@ void gfx_init(struct game_state* state){
     gfx_update_score(state->score);
 
     set_pixel(state->ball.x, state->ball.y, 0xFFFF);
+}
+
+void gfx_update_pad(const struct pad_status* pad_state){
+    set_pixel(pad_state->x - PAD_LENGTH/2, pad_state->y, 0xFFFF);
+    set_pixel(pad_state->x + PAD_LENGTH/2, pad_state->y, 0xFFFF);
+    set_pixel(pad_state->x - PAD_LENGTH/2 - 1, pad_state->y, 0x0);
+    set_pixel(pad_state->x + PAD_LENGTH/2 + 1, pad_state->y, 0x0);
 }
 
 void gfx_update_score(unsigned int score){

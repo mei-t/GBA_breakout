@@ -14,17 +14,17 @@
 #define SIDEWAYS_BLOCKS 8
 #define LENGTHWAYS_BLOCKS 3
 
-struct game_state {
+struct game_status {
     bool block[SIDEWAYS_BLOCKS][LENGTHWAYS_BLOCKS];
 
-    struct ball_state {
+    struct ball_status {
         unsigned short x;
         unsigned short y;
         bool is_up;
         bool is_left;
     } ball;
 
-    struct pad_state {
+    struct pad_status {
         unsigned short x;
         unsigned short y;
     } pad;
@@ -41,8 +41,8 @@ bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, int* sc
 
 bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, int *score);
 
-void check_next(struct game_state* state);
+void check_next(struct game_status* state);
 
-void define_ball_orbit(struct game_state* state);
+void define_ball_orbit(struct game_status* state);
 
 #endif

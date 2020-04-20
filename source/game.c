@@ -34,7 +34,7 @@ bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, int *score)
     return true;
 }
 
-void check_next(struct game_state* state){
+void check_next(struct game_status* state){
     unsigned short next_x = state->ball.x;
     unsigned short next_y = state->ball.y;
     state->ball.is_up ? next_y-- : next_y++;
@@ -50,7 +50,7 @@ void check_next(struct game_state* state){
     state->ball.is_up = !state->ball.is_up;
 }
 
-void define_ball_orbit(struct game_state* state){ // Reference is invalid. Why?
+void define_ball_orbit(struct game_status* state){ // Reference is invalid. Why?
     bool is_straight = true;
     if(can_go_horizontal(state->ball.x, state->ball.y, state->ball.is_left,&state->score)){
         state->ball.is_left = !state->ball.is_left;

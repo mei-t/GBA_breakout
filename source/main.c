@@ -30,7 +30,7 @@ int main(void){
     // vram[80*240 + 120] = 0x03E0; // X = 120, Y = 80, C = 000001111100000 = G
     // vram[80*240 + 125] = 0x7C00; // X = 125, Y = 80, C = 111110000000000 = B
 
-    struct game_state state;
+    struct game_status state;
     gfx_init(&state);
 
     // Wait forever
@@ -54,16 +54,14 @@ int main(void){
 
         // if Right is pressed
         if (is_pressed(BUTTON_RIGHT, buttons) && state.pad.x < GAME_WIDTH - PAD_LENGTH/2 - 1) {
-            set_pixel(state.pad.x-PAD_LENGTH/2, PAD_HEIGHT, 0x0);
             state.pad.x++;
-            set_pixel(state.pad.x+PAD_LENGTH/2, PAD_HEIGHT, 0xFFFF);
+            gfx_update_pad(&state.pad);
         }
 
         // if Left is pressed
         if (is_pressed(BUTTON_LEFT, buttons) && state.pad.x > PAD_LENGTH/2 + 1) {
-            set_pixel(state.pad.x+PAD_LENGTH/2, PAD_HEIGHT, 0x0);
             state.pad.x--;
-            set_pixel(state.pad.x-PAD_LENGTH/2, PAD_HEIGHT, 0xFFFF);
+            gfx_update_pad(&state.pad);
         }
 
         // vram[80*240 + x] = 0xFFFF; // X = x, Y = 80, C = 111111111111 = W

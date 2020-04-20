@@ -30,13 +30,15 @@ void delete_block(unsigned short x, unsigned short y, unsigned short color);
 
 
 /* Draw the initial screen */
-void gfx_init(struct game_state* state);
+void gfx_init(struct game_status* state);
 // /* Erase a block */
 // void gfx_delete_block(unsigned short x, unsigned short y);
 // /* Erase the ball from its old position and draw in the new one */
 // void gfx_update_ball(const struct ball_status* ball_state);
-// /* Erase the pad from its old position and draw in the new one */
-// void gfx_update_pad(const struct pad_status* pad_state);
+
+/* Erase the pad from its old position and draw in the new one */
+void gfx_update_pad(const struct pad_status* pad_state);
+
 /* Draw the new score */
 void gfx_update_score(unsigned int score);
 
