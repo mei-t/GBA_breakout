@@ -24,15 +24,15 @@ void draw_block(unsigned short x, unsigned short y, unsigned short color);
 /* Draw a line which is a part of number. */
 void draw_line(unsigned short x, unsigned short y, bool is_white, bool is_sideway);
 
-/* Delete the block which the ball hit. */
-void delete_block(unsigned short x, unsigned short y, unsigned short color);
 
 
 
 /* Draw the initial screen */
 void gfx_init(struct game_status* state);
-// /* Erase a block */
-// void gfx_delete_block(unsigned short x, unsigned short y);
+
+/* Erase a block */
+void gfx_delete_block(unsigned short x, unsigned short y, unsigned short color);
+
 // /* Erase the ball from its old position and draw in the new one */
 // void gfx_update_ball(const struct ball_status* ball_state);
 

@@ -122,6 +122,17 @@ void gfx_init(struct game_status* state){
     set_pixel(state->ball.x, state->ball.y, 0xFFFF);
 }
 
+void gfx_delete_block(unsigned short x, unsigned short y, unsigned short color){
+    if(VRAM[y * MODE3_WIDTH + x] != color){
+        return;
+    }
+    set_pixel(x, y, 0x0);
+    gfx_delete_block(x-1, y, color);
+    gfx_delete_block(x, y-1, color);
+    gfx_delete_block(x+1, y, color);
+    gfx_delete_block(x, y+1, color);
+}
+
 void gfx_update_pad(const struct pad_status* pad_state){
     set_pixel(pad_state->x - PAD_LENGTH/2, pad_state->y, 0xFFFF);
     set_pixel(pad_state->x + PAD_LENGTH/2, pad_state->y, 0xFFFF);
@@ -145,17 +156,6 @@ void gfx_update_score(unsigned int score){
         score /= 10;
         digit++;
     }while(score != 0);
-}
-
-void delete_block(unsigned short x, unsigned short y, unsigned short color){
-    if(VRAM[y * MODE3_WIDTH + x] != color){
-        return;
-    }
-    set_pixel(x, y, 0x0);
-    delete_block(x-1, y, color);
-    delete_block(x, y-1, color);
-    delete_block(x+1, y, color);
-    delete_block(x, y+1, color);
 }
 
 void gfx_draw_game_over(){
