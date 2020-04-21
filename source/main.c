@@ -47,10 +47,11 @@ int main(void){
         char buttons = ioreg[0x130];
 
         define_ball_orbit(&state);
-        set_pixel(state.ball.x, state.ball.y, 0x0);
+        state.ball.prev_x = state.ball.x;
+        state.ball.prev_y = state.ball.y;
         state.ball.is_up ? state.ball.y-- : state.ball.y++;
         state.ball.is_left ? state.ball.x-- : state.ball.x++;
-        set_pixel(state.ball.x, state.ball.y, 0xFFFF);
+        gfx_update_ball(&state.ball);
 
         // if Right is pressed
         if (is_pressed(BUTTON_RIGHT, buttons) && state.pad.x < GAME_WIDTH - PAD_LENGTH/2 - 1) {

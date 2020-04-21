@@ -133,6 +133,11 @@ void gfx_delete_block(unsigned short x, unsigned short y, unsigned short color){
     gfx_delete_block(x, y+1, color);
 }
 
+void gfx_update_ball(const struct ball_status* ball_state){
+    set_pixel(ball_state->prev_x, ball_state->prev_y, 0x0);
+    set_pixel(ball_state->x, ball_state->y, 0xFFFF);
+}
+
 void gfx_update_pad(const struct pad_status* pad_state){
     set_pixel(pad_state->x - PAD_LENGTH/2, pad_state->y, 0xFFFF);
     set_pixel(pad_state->x + PAD_LENGTH/2, pad_state->y, 0xFFFF);
