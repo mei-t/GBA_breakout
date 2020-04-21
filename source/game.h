@@ -47,4 +47,6 @@ void check_next(struct game_status* state);
 
 void define_ball_orbit(struct game_status* state);
 
+void update_ball(struct ball_status* ball_state);
+
 #endif
