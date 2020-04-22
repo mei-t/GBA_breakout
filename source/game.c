@@ -5,13 +5,13 @@ bool is_pressed(unsigned short BUTTON, unsigned short buttons){
     return (BUTTON & buttons) == 0;
 }
 
-void hit_block(unsigned short x, unsigned short y, unsigned short color, int *score){
+void hit_block(unsigned short x, unsigned short y, unsigned short color, unsigned int *score){
     gfx_delete_block(x, y, color);
     (*score)++;
     gfx_update_score(*score);
 }
 
-bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, int* score){
+bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, unsigned int* score){
     is_left ? x-- : x++;
     unsigned short next_color = VRAM[y*MODE3_WIDTH + x];
     if(next_color == 0x0){
@@ -23,7 +23,7 @@ bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, int* sc
     return true;
 }
 
-bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, int *score){
+bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, unsigned int *score){
     is_up ? y-- : y++;
     unsigned short next_color = VRAM[y*MODE3_WIDTH + x];
     if(next_color == 0x0){

@@ -30,11 +30,11 @@ struct game_status {
 /* If the button pressed or not. */
 bool is_pressed(unsigned short BUTTON, unsigned short buttons);
 
-void hit_block(unsigned short x, unsigned short y, unsigned short color, int *score);
+void hit_block(unsigned short x, unsigned short y, unsigned short color, unsigned int *score);
 
-bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, int* score);
+bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, unsigned int* score);
 
-bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, int *score);
+bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, unsigned int *score);
 
 void check_next(struct game_status* state);
 
