@@ -3,6 +3,13 @@
 
 #include "game.h"
 
+/* Size in pixels of screen in mode 3 */
+#define MODE3_WIDTH 240
+#define MODE3_HEIGHT 160
+
+/* Video memory */
+#define VRAM ((volatile unsigned short *)0x06000000)
+
 /* Size of game screen */
 #define GAME_WIDTH 160
 

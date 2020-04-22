@@ -3,13 +3,6 @@
 
 #include <stdbool.h>
 
-/* Size in pixels of screen in mode 3 */
-#define MODE3_WIDTH 240
-#define MODE3_HEIGHT 160
-
-/* Video memory */
-#define VRAM ((volatile unsigned short *)0x06000000)
-
 /* The number of blocks */
 #define SIDEWAYS_BLOCKS 8
 #define LENGTHWAYS_BLOCKS 3
