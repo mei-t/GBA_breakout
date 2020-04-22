@@ -1,7 +1,7 @@
 #ifndef _CODE_GRAPHICS_H_
 #define _CODE_GRAPHICS_H_
 
-#include "game.h"
+#include <stdbool.h>
 
 /* Size in pixels of screen in mode 3 */
 #define MODE3_WIDTH 240

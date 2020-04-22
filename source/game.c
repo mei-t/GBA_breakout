@@ -1,4 +1,5 @@
 #include "game.h"
+#include "graphics.h"
 
 bool is_pressed(unsigned short BUTTON, unsigned short buttons){
     return (BUTTON & buttons) == 0;

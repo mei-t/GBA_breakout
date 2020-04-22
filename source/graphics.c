@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include "game.h"
 
 int number[10][7] = {
     {1, 0, 1, 1, 1, 1, 1},
@@ -83,15 +84,8 @@ void gfx_init(struct game_status* state){
     // Draw blocks.
     for(int i=0; i<SIDEWAYS_BLOCKS; i++){
         for(int j=0; j<LENGTHWAYS_BLOCKS; j++){
-            // if(i == 1 && j == 0){
-            //     set_pixel(2, 2, 0x03E0);
-            // }
-            // draw_block((i + 1) *(BLOCK_LENGTH+5)-1, (j + 1)*(BLOCK_HEIGHT+5), 0x03E0);
             if(state->block[i][j]){
                 draw_block((i + 1) *(BLOCK_LENGTH+5)-1, (j + 1)*(BLOCK_HEIGHT+5), 0x7C00);
-                // if(i == 1 && j == 0){
-                //     set_pixel(1, 1, 0x001F);
-                // }
             }
         }
     }
