@@ -22,6 +22,10 @@
 /* Height of the pad */
 #define PAD_HEIGHT 140
 
+struct game_status;
+struct ball_status;
+struct pad_status;
+
 /* Set a pixel. */
 void set_pixel(unsigned short x, unsigned short y, unsigned short color);
 
