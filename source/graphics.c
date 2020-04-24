@@ -60,6 +60,11 @@ static void draw_line(unsigned short x, unsigned short y, bool is_white, bool is
 }
 
 void gfx_init(struct game_status* state){
+    // The video mode setting
+    volatile char *ioreg = (char *)0x04000000;
+    ioreg[0] = 0x03;
+    ioreg[1] = 0x04;
+
     for(int i=0; i<MODE3_HEIGHT-1; i++){
         set_pixel(0, i, 0xFFFF);
         set_pixel(GAME_WIDTH, i, 0xFFFF);
