@@ -37,11 +37,11 @@ int main(void){
     while(1){
         if(state.ball.y == MODE3_HEIGHT-2){
             gfx_draw_game_over();
-            break;
+            return 0;
         }else if(state.score == SIDEWAYS_BLOCKS * LENGTHWAYS_BLOCKS){
             // set_pixel(25, 25, 0x7C00); // brue
             gfx_draw_game_clear();
-            break;
+            return 0;
         }
 
         char buttons = ioreg[0x130];
