@@ -1,7 +1,7 @@
 #include "graphics.h"
 #include "game.h"
 
-int number[10][7] = {
+static int number[10][7] = {
     {1, 0, 1, 1, 1, 1, 1},
     {0, 0, 0, 0, 1, 0, 1},
     {1, 1, 1, 0, 1, 1, 0},
@@ -14,7 +14,7 @@ int number[10][7] = {
     {1, 1, 1, 1, 1, 0, 1}
 };
 
-int letter_g[12][9] = {
+static int letter_g[12][9] = {
     {0, 0, 1, 1, 1, 1, 1, 0, 0},
     {0, 1, 1, 1, 1, 1, 1, 1, 0},
     {1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -29,12 +29,12 @@ int letter_g[12][9] = {
     {0, 0, 1, 1, 1, 1, 1, 0, 0}
 };
 
-void set_pixel(unsigned short x, unsigned short y, unsigned short color){
+static void set_pixel(unsigned short x, unsigned short y, unsigned short color){
     VRAM[y * MODE3_WIDTH + x] = color;
     return;
 }
 
-void draw_block(unsigned short x, unsigned short y, unsigned short color){
+static void draw_block(unsigned short x, unsigned short y, unsigned short color){
     for(int i=0; i<BLOCK_HEIGHT; i++){
         for(int j=0; j<BLOCK_LENGTH; j++){
             set_pixel(x+j, y+i, color);
@@ -42,7 +42,7 @@ void draw_block(unsigned short x, unsigned short y, unsigned short color){
     }
 }
 
-void draw_line(unsigned short x, unsigned short y, bool is_white, bool is_sideway){
+static void draw_line(unsigned short x, unsigned short y, bool is_white, bool is_sideway){
     unsigned short color;
     if(is_white){
         color = 0xFFFF;

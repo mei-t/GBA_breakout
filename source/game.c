@@ -5,13 +5,13 @@ bool is_pressed(unsigned short BUTTON, unsigned short buttons){
     return (BUTTON & buttons) == 0;
 }
 
-void hit_block(unsigned short x, unsigned short y, unsigned short color, unsigned int *score){
+static void hit_block(unsigned short x, unsigned short y, unsigned short color, unsigned int *score){
     gfx_delete_block(x, y, color);
     (*score)++;
     gfx_update_score(*score);
 }
 
-bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, unsigned int* score){
+static bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, unsigned int* score){
     is_left ? x-- : x++;
     unsigned short next_color = VRAM[y*MODE3_WIDTH + x];
     if(next_color == 0x0){
@@ -23,7 +23,7 @@ bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, unsigne
     return true;
 }
 
-bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, unsigned int *score){
+static bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, unsigned int *score){
     is_up ? y-- : y++;
     unsigned short next_color = VRAM[y*MODE3_WIDTH + x];
     if(next_color == 0x0){
@@ -51,7 +51,7 @@ void check_next(struct game_status* state){
     state->ball.is_up = !state->ball.is_up;
 }
 
-void define_ball_orbit(struct game_status* state){ // Reference is invalid. Why?
+void define_ball_orbit(struct game_status* state){
     bool is_straight = true;
     if(can_go_horizontal(state->ball.x, state->ball.y, state->ball.is_left,&state->score)){
         state->ball.is_left = !state->ball.is_left;

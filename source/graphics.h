@@ -1,8 +1,6 @@
 #ifndef _CODE_GRAPHICS_H_
 #define _CODE_GRAPHICS_H_
 
-#include <stdbool.h>
-
 /* Size in pixels of screen in mode 3 */
 #define MODE3_WIDTH 240
 #define MODE3_HEIGHT 160
@@ -25,18 +23,6 @@
 struct game_status;
 struct ball_status;
 struct pad_status;
-
-/* Set a pixel. */
-void set_pixel(unsigned short x, unsigned short y, unsigned short color);
-
-/* Draw a block. */
-void draw_block(unsigned short x, unsigned short y, unsigned short color);
-
-/* Draw a line which is a part of number. */
-void draw_line(unsigned short x, unsigned short y, bool is_white, bool is_sideway);
-
-
-
 
 /* Draw the initial screen */
 void gfx_init(struct game_status* state);
