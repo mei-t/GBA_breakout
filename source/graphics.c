@@ -29,6 +29,10 @@ static int letter_g[12][9] = {
     {0, 0, 1, 1, 1, 1, 1, 0, 0}
 };
 
+// The previous position of the ball. so we can delete it.
+static unsigned short prev_ball_x;
+static unsigned short prev_ball_y;
+
 static void set_pixel(unsigned short x, unsigned short y, unsigned short color){
     VRAM[y * MODE3_WIDTH + x] = color;
     return;
@@ -119,6 +123,8 @@ void gfx_init(struct game_status* state){
     gfx_update_score(state->score);
 
     set_pixel(state->ball.x, state->ball.y, 0xFFFF);
+    prev_ball_x = state->ball.x;
+    prev_ball_y = state->ball.y;
 }
 
 void gfx_delete_block(unsigned short x, unsigned short y, unsigned short color){
@@ -133,8 +139,10 @@ void gfx_delete_block(unsigned short x, unsigned short y, unsigned short color){
 }
 
 void gfx_update_ball(const struct ball_status* ball_state){
-    set_pixel(ball_state->prev_x, ball_state->prev_y, 0x0);
+    set_pixel(prev_ball_x, prev_ball_y, 0x0);
     set_pixel(ball_state->x, ball_state->y, 0xFFFF);
+    prev_ball_x = ball_state->x;
+    prev_ball_y = ball_state->y;
 }
 
 void gfx_update_pad(const struct pad_status* pad_state){

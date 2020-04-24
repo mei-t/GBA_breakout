@@ -67,8 +67,6 @@ void define_ball_orbit(struct game_status* state){
 }
 
 void update_ball(struct ball_status* ball_state){
-    ball_state->prev_x = ball_state->x;
-    ball_state->prev_y = ball_state->y;
     ball_state->is_up ? ball_state->y-- : ball_state->y++;
     ball_state->is_left ? ball_state->x-- : ball_state->x++;
 }

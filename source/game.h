@@ -13,8 +13,6 @@ struct game_status {
     struct ball_status {
         unsigned short x;
         unsigned short y;
-        unsigned short prev_x;
-        unsigned short prev_y;
         bool is_up;
         bool is_left;
     } ball;
