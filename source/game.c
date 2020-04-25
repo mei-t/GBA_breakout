@@ -1,6 +1,21 @@
 #include "game.h"
 #include "graphics.h"
 
+void game_init(struct game_status* state){
+    // Initialize state.
+    for(int i = 0; i < SIDEWAYS_BLOCKS; i++){
+        for(int j = 0; j < LENGTHWAYS_BLOCKS; j++){
+            state->block[i][j] = true;
+        }
+    }
+    struct ball_status ball = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false};
+    state->ball = ball;
+    struct pad_status pad = {GAME_WIDTH/2, PAD_HEIGHT};
+    state->pad = pad;
+    state->score = 0;
+
+}
+
 bool is_pressed(unsigned short BUTTON, unsigned short buttons){
     return (BUTTON & buttons) == 0;
 }

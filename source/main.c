@@ -22,6 +22,7 @@ void wait_vsync() {
 int main(void){
     volatile char *ioreg = (char *)0x04000000;
     struct game_status state;
+    game_init(&state);
     gfx_init(&state);
 
     // Wait forever

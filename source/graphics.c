@@ -63,7 +63,7 @@ static void draw_line(unsigned short x, unsigned short y, bool is_white, bool is
     }
 }
 
-void gfx_init(struct game_status* state){
+void gfx_init(const struct game_status* state){
     // The video mode setting
     volatile char *ioreg = (char *)0x04000000;
     ioreg[0] = 0x03;
@@ -77,18 +77,6 @@ void gfx_init(struct game_status* state){
         set_pixel(i, 0, 0xFFFF);
         set_pixel(i, MODE3_HEIGHT-1, 0xFFFF);
     }
-
-    // Initialize state.
-    for(int i = 0; i < SIDEWAYS_BLOCKS; i++){
-        for(int j = 0; j < LENGTHWAYS_BLOCKS; j++){
-            state->block[i][j] = true;
-        }
-    }
-    struct ball_status ball = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false};
-    state->ball = ball;
-    struct pad_status pad = {GAME_WIDTH/2, PAD_HEIGHT};
-    state->pad = pad;
-    state->score = 0;
 
     // Draw blocks.
     for(int i=0; i<SIDEWAYS_BLOCKS; i++){

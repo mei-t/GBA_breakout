@@ -25,7 +25,7 @@ struct ball_status;
 struct pad_status;
 
 /* Draw the initial screen */
-void gfx_init(struct game_status* state);
+void gfx_init(const struct game_status* state);
 
 /* Erase a block */
 void gfx_delete_block(unsigned short x, unsigned short y, unsigned short color);

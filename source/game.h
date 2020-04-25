@@ -25,6 +25,9 @@ struct game_status {
     unsigned int score;
 };
 
+/* Initialize game status. */
+void game_init(struct game_status* state);
+
 /* If the button pressed or not. */
 bool is_pressed(unsigned short BUTTON, unsigned short buttons);
 
