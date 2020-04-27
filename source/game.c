@@ -20,64 +20,55 @@ bool is_pressed(unsigned short BUTTON, unsigned short buttons){
     return (BUTTON & buttons) == 0;
 }
 
-static void hit_block(unsigned short x, unsigned short y, unsigned short color, unsigned int *score){
-    gfx_delete_block(x, y, color);
-    (*score)++;
-    gfx_update_score(*score);
+typedef enum { NOTHING, BLOCK, WALL } collision;
+
+static collision can_go_horizontal(const struct ball_status* ball_state){
+    unsigned short x = ball_state->x;
+    ball_state->is_left ? x-- : x++;
+    unsigned short next_color = VRAM[ball_state->y*MODE3_WIDTH + x];
+    switch (next_color) {
+        case 0x0: return NOTHING;
+        case 0xFFFF: return WALL;
+        default: return BLOCK;
+    }
 }
 
-static bool can_go_horizontal(unsigned short x, unsigned short y, bool is_left, unsigned int* score){
-    is_left ? x-- : x++;
-    unsigned short next_color = VRAM[y*MODE3_WIDTH + x];
-    if(next_color == 0x0){
-        return false;
+static collision can_go_vertical(const struct ball_status* ball_state){
+    unsigned short y = ball_state->y;
+    ball_state->is_up ? y-- : y++;
+    unsigned short next_color = VRAM[y*MODE3_WIDTH + ball_state->x];
+    switch (next_color) {
+        case 0x0: return NOTHING;
+        case 0xFFFF: return WALL;
+        default: return BLOCK;
     }
-    if(next_color != 0xFFFF){
-        hit_block(x, y, next_color, score);
-    }
-    return true;
-}
-
-static bool can_go_vertical(unsigned short x, unsigned short y, bool is_up, unsigned int *score){
-    is_up ? y-- : y++;
-    unsigned short next_color = VRAM[y*MODE3_WIDTH + x];
-    if(next_color == 0x0){
-        return false;
-    }
-    if(next_color != 0xFFFF){
-        hit_block(x, y, next_color, score);
-    }
-    return true;
-}
-
-void check_next(struct game_status* state){
-    unsigned short next_x = state->ball.x;
-    unsigned short next_y = state->ball.y;
-    state->ball.is_up ? next_y-- : next_y++;
-    state->ball.is_left ? next_x-- : next_x++;
-    unsigned short next_color = VRAM[next_y * MODE3_WIDTH + next_x];
-    if(next_color == 0x0){
-        return;
-    }
-    if(next_color != 0xFFFF){
-        hit_block(next_x, next_y, next_color, &state->score);
-    }
-    state->ball.is_left = !state->ball.is_left;
-    state->ball.is_up = !state->ball.is_up;
 }
 
 void define_ball_orbit(struct game_status* state){
-    bool is_straight = true;
-    if(can_go_horizontal(state->ball.x, state->ball.y, state->ball.is_left,&state->score)){
+    bool block_hit = false;
+    collision col = can_go_horizontal(&state->ball);
+    if(col != NOTHING) {
+        if(col == BLOCK) {
+            unsigned short next_x = state->ball.x + (state->ball.is_left ? -1 : 1);
+            block_hit = true;
+            gfx_delete_block(next_x, state->ball.y, 0x7C00);
+        }
         state->ball.is_left = !state->ball.is_left;
-        is_straight = false;
     }
-    if(can_go_vertical(state->ball.x, state->ball.y, state->ball.is_up, &state->score)){
+
+    col = can_go_vertical(&state->ball);
+    if(col != NOTHING) {
+        if(col == BLOCK) {
+            unsigned short next_y = state->ball.y + (state->ball.is_up ? -1 : 1);
+            block_hit = true;
+            gfx_delete_block(state->ball.x, next_y, 0x7C00);
+        }
         state->ball.is_up = !state->ball.is_up;
-        is_straight = false;
     }
-    if(is_straight){
-        check_next(state);
+
+    if(block_hit) {
+        state->score++;
+        gfx_update_score(state->score);
     }
 }
 
