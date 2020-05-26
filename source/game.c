@@ -22,6 +22,16 @@ bool is_pressed(unsigned short BUTTON, unsigned short buttons){
 
 typedef enum { NOTHING, BLOCK, WALL } collision;
 
+static bool is_wall_hit(unsigned short x, unsigned short y) {
+    return (x == 0 || x >= GAME_WIDTH || y == 0 || y >= MODE3_HEIGHT - 1);
+}
+
+static bool is_pad_hit(const struct game_status* state, unsigned short x, unsigned short y) {
+    if(y == state->pad.y - 1 && x > state->pad.x - PAD_LENGTH/2 && x < state->pad.x + PAD_LENGTH/2)
+        return true;
+    return false;
+}
+
 static collision can_go_horizontal(const struct ball_status* ball_state){
     unsigned short x = ball_state->x;
     ball_state->is_left ? x-- : x++;
