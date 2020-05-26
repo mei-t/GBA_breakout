@@ -27,9 +27,7 @@ static bool is_wall_hit(unsigned short x, unsigned short y) {
 }
 
 static bool is_pad_hit(const struct game_status* state, unsigned short x, unsigned short y) {
-    if(y == state->pad.y - 1 && x > state->pad.x - PAD_LENGTH/2 && x < state->pad.x + PAD_LENGTH/2)
-        return true;
-    return false;
+    return (y == state->pad.y - 1 && x > state->pad.x - PAD_LENGTH/2 && x < state->pad.x + PAD_LENGTH/2);
 }
 
 static collision can_go_horizontal(const struct ball_status* ball_state){
