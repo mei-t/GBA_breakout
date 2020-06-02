@@ -1,6 +1,6 @@
 # Breakout on GBA  
 This is a breakout working on Game Boy Advance.  
-![result](https://user-images.githubusercontent.com/39663339/83477583-8df3ba00-a4ce-11ea-8b77-6122802a8372.gif)
+<p align="center"><img src="https://user-images.githubusercontent.com/39663339/83477583-8df3ba00-a4ce-11ea-8b77-6122802a8372.gif" width="75%"></p>
 
 ## Requirement  
 Download devkitPro : <https://devkitpro.org/wiki/Getting_Started>
