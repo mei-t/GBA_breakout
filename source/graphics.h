@@ -15,6 +15,9 @@
 #define BLOCK_LENGTH 10
 #define BLOCK_HEIGHT 8
 
+/* Gap between blocks */
+#define BLOCK_GAP 5
+
 /* Length of the pad */
 #define PAD_LENGTH 35
 /* Height of the pad */
