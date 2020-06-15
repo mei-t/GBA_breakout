@@ -40,6 +40,14 @@ static bool is_block_hit(unsigned short x, unsigned short y) {
     return false;
 }
 
+static unsigned int get_block_x_index(unsigned int x) {
+    return (x - BLOCK_MARGIN_X) / (BLOCK_GAP + BLOCK_LENGTH);
+}
+
+static unsigned int get_block_y_index(unsigned int y) {
+    return (y - BLOCK_MARGIN_Y) / (BLOCK_GAP + BLOCK_HEIGHT);
+}
+
 typedef struct {
     enum { NOTHING, BLOCK, PAD, WALL } type;
     /* block_x and block_y are set to the coordinates of the block if type is BLOCK */
@@ -56,8 +64,8 @@ static collision is_colliding(const struct game_status* state, unsigned short x,
 
     if (is_block_hit(x, y)) {
         collision ret = { BLOCK };
-        ret.block_x = x;
-        ret.block_y = y;
+        ret.block_x = get_block_x_index(x);
+        ret.block_y = get_block_y_index(y);
         return ret;
     }
     collision ret = { NOTHING };
@@ -86,7 +94,8 @@ void define_ball_orbit(struct game_status* state){
 
             // TODO: replace this function with one that uses col.block_x and col.block_y
             // to delete the block, without using a color.
-            gfx_delete_block(next_x, state->ball.y, 0x7C00);
+            gfx_delete_block(col.block_x, col.block_y);
+            // gfx_delete_block(get_block_x_index(next_x), get_block_x_index(state->ball.y));
         }
         state->ball.is_left = !state->ball.is_left;
     }
@@ -96,7 +105,7 @@ void define_ball_orbit(struct game_status* state){
         if(col.type == BLOCK) {
             unsigned short next_y = state->ball.y + (state->ball.is_up ? -1 : 1);
             block_hit = true;
-            gfx_delete_block(state->ball.x, next_y, 0x7C00);
+            gfx_delete_block(col.block_x, col.block_y);
         }
         state->ball.is_up = !state->ball.is_up;
     }

@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 /* The number of blocks */
-#define SIDEWAYS_BLOCKS 8
+#define SIDEWAYS_BLOCKS 10
 #define LENGTHWAYS_BLOCKS 3
 
 struct game_status {

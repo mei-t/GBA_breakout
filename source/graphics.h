@@ -15,6 +15,10 @@
 #define BLOCK_LENGTH 10
 #define BLOCK_HEIGHT 8
 
+/* Margin between blocks and game screen */
+#define BLOCK_MARGIN_X 8
+#define BLOCK_MARGIN_Y 8
+
 /* Gap between blocks */
 #define BLOCK_GAP 5
 
@@ -31,7 +35,7 @@ struct pad_status;
 void gfx_init(const struct game_status* state);
 
 /* Erase a block */
-void gfx_delete_block(unsigned short x, unsigned short y, unsigned short color);
+void gfx_delete_block(unsigned short x, unsigned short y);
 
 /* Erase the ball from its old position and draw in the new one */
 void gfx_update_ball(const struct ball_status* ball_state);

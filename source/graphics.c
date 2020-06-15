@@ -82,7 +82,7 @@ void gfx_init(const struct game_status* state){
     for(int i=0; i<SIDEWAYS_BLOCKS; i++){
         for(int j=0; j<LENGTHWAYS_BLOCKS; j++){
             if(state->block[i][j]){
-                draw_block((i + 1) *(BLOCK_LENGTH+5)-1, (j + 1)*(BLOCK_HEIGHT+5), 0x7C00);
+                draw_block(i * (BLOCK_LENGTH + BLOCK_GAP) + BLOCK_MARGIN_X, j * (BLOCK_HEIGHT + BLOCK_GAP) + BLOCK_MARGIN_Y, 0x7C00);
             }
         }
     }
@@ -115,15 +115,23 @@ void gfx_init(const struct game_status* state){
     prev_ball_y = state->ball.y;
 }
 
-void gfx_delete_block(unsigned short x, unsigned short y, unsigned short color){
-    if(VRAM[y * MODE3_WIDTH + x] != color){
-        return;
+// void gfx_delete_block(unsigned short x, unsigned short y, unsigned short color){
+//     if(VRAM[y * MODE3_WIDTH + x] != color){
+//         return;
+//     }
+//     set_pixel(x, y, 0x0);
+//     gfx_delete_block(x-1, y, color);
+//     gfx_delete_block(x, y-1, color);
+//     gfx_delete_block(x+1, y, color);
+//     gfx_delete_block(x, y+1, color);
+// }
+
+void gfx_delete_block(unsigned short x, unsigned short y){
+    for(int i=0; i<BLOCK_HEIGHT; i++){
+        for(int j=0; j<BLOCK_LENGTH; j++){
+            set_pixel(x+j, y+i, 0x0);
+        }
     }
-    set_pixel(x, y, 0x0);
-    gfx_delete_block(x-1, y, color);
-    gfx_delete_block(x, y-1, color);
-    gfx_delete_block(x+1, y, color);
-    gfx_delete_block(x, y+1, color);
 }
 
 void gfx_update_ball(const struct ball_status* ball_state){
