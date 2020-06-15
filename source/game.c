@@ -31,12 +31,13 @@ static bool is_pad_hit(const struct game_status* state, unsigned short x, unsign
 }
 
 static bool is_block_hit(unsigned short x, unsigned short y) {
-    unsigned short block_max_x = (BLOCK_GAP + BLOCK_LENGTH) * SIDEWAYS_BLOCKS;
-    unsigned short block_max_y = (BLOCK_GAP + BLOCK_HEIGHT) * LENGTHWAYS_BLOCKS;
-    if(x < BLOCK_GAP || x > block_max_x || y < BLOCK_GAP || y > block_max_y)
+    unsigned short block_max_x = BLOCK_MARGIN_X + (BLOCK_GAP + BLOCK_LENGTH) * SIDEWAYS_BLOCKS;
+    unsigned short block_max_y = BLOCK_MARGIN_Y + (BLOCK_GAP + BLOCK_HEIGHT) * LENGTHWAYS_BLOCKS;
+    if(x < BLOCK_MARGIN_X || x > block_max_x || y < BLOCK_MARGIN_Y || y > block_max_y) 
         return false;
-    if(x % (BLOCK_GAP + BLOCK_LENGTH) > BLOCK_GAP && y % (BLOCK_GAP + BLOCK_HEIGHT > BLOCK_GAP))
+    if((x - BLOCK_MARGIN_X) % (BLOCK_GAP + BLOCK_LENGTH) <= BLOCK_LENGTH && (y - BLOCK_MARGIN_Y) % (BLOCK_GAP + BLOCK_HEIGHT) <= BLOCK_HEIGHT)
         return true;
+    // VRAM[15 * MODE3_WIDTH + 15] = 0x03E0;
     return false;
 }
 
@@ -95,7 +96,6 @@ void define_ball_orbit(struct game_status* state){
             // TODO: replace this function with one that uses col.block_x and col.block_y
             // to delete the block, without using a color.
             gfx_delete_block(col.block_x, col.block_y);
-            // gfx_delete_block(get_block_x_index(next_x), get_block_x_index(state->ball.y));
         }
         state->ball.is_left = !state->ball.is_left;
     }

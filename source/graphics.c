@@ -115,18 +115,8 @@ void gfx_init(const struct game_status* state){
     prev_ball_y = state->ball.y;
 }
 
-// void gfx_delete_block(unsigned short x, unsigned short y, unsigned short color){
-//     if(VRAM[y * MODE3_WIDTH + x] != color){
-//         return;
-//     }
-//     set_pixel(x, y, 0x0);
-//     gfx_delete_block(x-1, y, color);
-//     gfx_delete_block(x, y-1, color);
-//     gfx_delete_block(x+1, y, color);
-//     gfx_delete_block(x, y+1, color);
-// }
-
 void gfx_delete_block(unsigned short x, unsigned short y){
+    set_pixel(10, 10, 0x03E0);
     for(int i=0; i<BLOCK_HEIGHT; i++){
         for(int j=0; j<BLOCK_LENGTH; j++){
             set_pixel(x+j, y+i, 0x0);
