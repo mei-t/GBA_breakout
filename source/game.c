@@ -27,7 +27,13 @@ static bool is_wall_hit(unsigned short x, unsigned short y) {
 }
 
 static bool is_pad_hit(const struct game_status* state, unsigned short x, unsigned short y) {
-    return (y == state->pad.y - 1 && x > state->pad.x - PAD_LENGTH/2 && x < state->pad.x + PAD_LENGTH/2);
+    if(y == state->pad.y) {
+        VRAM[0 * MODE3_WIDTH + 0] = 0x03E0;
+    }
+    // if(x > state->pad.x - PAD_LENGTH/2) {
+    //     VRAM[1 * MODE3_WIDTH + 0] = 0x03E0;
+    // }
+    return (y == state->pad.y && x > state->pad.x - PAD_LENGTH/2 && x < state->pad.x + PAD_LENGTH/2);
 }
 
 static bool is_block_hit(unsigned short x, unsigned short y) {
@@ -65,10 +71,17 @@ static collision is_colliding(const struct game_status* state, unsigned short x,
 
     if (is_block_hit(x, y)) {
         collision ret = { BLOCK };
-        ret.block_x = get_block_x_index(x);
-        ret.block_y = get_block_y_index(y);
+        // state->block[get_block_x_index(x)][get_block_y_index(y)] = false;
+        ret.block_x = get_block_x_index(x) * (BLOCK_LENGTH + BLOCK_GAP) + BLOCK_MARGIN_X;
+        ret.block_y = get_block_y_index(y) * (BLOCK_HEIGHT + BLOCK_GAP) + BLOCK_MARGIN_Y;
         return ret;
     }
+
+    if(is_pad_hit(state, x, y)) {
+        collision ret = { PAD };
+        return ret;
+    }
+
     collision ret = { NOTHING };
     return ret;
 }
@@ -93,6 +106,7 @@ void define_ball_orbit(struct game_status* state){
             unsigned short next_x = state->ball.x + (state->ball.is_left ? -1 : 1);
             block_hit = true;
 
+            // VRAM[15 * MODE3_WIDTH + 15] = 0x03E0;
             // TODO: replace this function with one that uses col.block_x and col.block_y
             // to delete the block, without using a color.
             gfx_delete_block(col.block_x, col.block_y);
@@ -105,6 +119,7 @@ void define_ball_orbit(struct game_status* state){
         if(col.type == BLOCK) {
             unsigned short next_y = state->ball.y + (state->ball.is_up ? -1 : 1);
             block_hit = true;
+            // VRAM[15 * MODE3_WIDTH + 15] = 0x001F;
             gfx_delete_block(col.block_x, col.block_y);
         }
         state->ball.is_up = !state->ball.is_up;

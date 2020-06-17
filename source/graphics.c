@@ -116,7 +116,8 @@ void gfx_init(const struct game_status* state){
 }
 
 void gfx_delete_block(unsigned short x, unsigned short y){
-    set_pixel(10, 10, 0x03E0);
+    // set_pixel(0, 0, 0x03E0);
+    // TODO: Fix
     for(int i=0; i<BLOCK_HEIGHT; i++){
         for(int j=0; j<BLOCK_LENGTH; j++){
             set_pixel(x+j, y+i, 0x0);
