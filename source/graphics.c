@@ -135,8 +135,12 @@ void gfx_update_ball(const struct ball_status* ball_state){
 void gfx_update_pad(const struct pad_status* pad_state){
     set_pixel(pad_state->x - PAD_LENGTH/2, pad_state->y, 0xFFFF);
     set_pixel(pad_state->x + PAD_LENGTH/2, pad_state->y, 0xFFFF);
-    set_pixel(pad_state->x - PAD_LENGTH/2 - 1, pad_state->y, 0x0);
-    set_pixel(pad_state->x + PAD_LENGTH/2 + 1, pad_state->y, 0x0);
+    unsigned short pad_left = pad_state->x - PAD_LENGTH/2 - 1;
+    unsigned short pad_right = pad_state->x + PAD_LENGTH/2 + 1;
+    if(pad_left > 0)
+        set_pixel(pad_left, pad_state->y, 0x0);
+    if(pad_right < GAME_WIDTH)
+        set_pixel(pad_right, pad_state->y, 0x0);
 }
 
 void gfx_update_score(unsigned int score){

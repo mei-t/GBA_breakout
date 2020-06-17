@@ -27,12 +27,6 @@ static bool is_wall_hit(unsigned short x, unsigned short y) {
 }
 
 static bool is_pad_hit(const struct game_status* state, unsigned short x, unsigned short y) {
-    if(y == state->pad.y) {
-        VRAM[0 * MODE3_WIDTH + 0] = 0x03E0;
-    }
-    // if(x > state->pad.x - PAD_LENGTH/2) {
-    //     VRAM[1 * MODE3_WIDTH + 0] = 0x03E0;
-    // }
     return (y == state->pad.y && x > state->pad.x - PAD_LENGTH/2 && x < state->pad.x + PAD_LENGTH/2);
 }
 
