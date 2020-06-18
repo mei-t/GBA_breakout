@@ -30,23 +30,28 @@ static bool is_pad_hit(const struct game_status* state, unsigned short x, unsign
     return (y == state->pad.y && x > state->pad.x - PAD_LENGTH/2 && x < state->pad.x + PAD_LENGTH/2);
 }
 
-static bool is_block_hit(unsigned short x, unsigned short y) {
-    unsigned short block_max_x = BLOCK_MARGIN_X + (BLOCK_GAP + BLOCK_LENGTH) * SIDEWAYS_BLOCKS;
-    unsigned short block_max_y = BLOCK_MARGIN_Y + (BLOCK_GAP + BLOCK_HEIGHT) * LENGTHWAYS_BLOCKS;
-    if(x < BLOCK_MARGIN_X || x > block_max_x || y < BLOCK_MARGIN_Y || y > block_max_y) 
-        return false;
-    if((x - BLOCK_MARGIN_X) % (BLOCK_GAP + BLOCK_LENGTH) <= BLOCK_LENGTH && (y - BLOCK_MARGIN_Y) % (BLOCK_GAP + BLOCK_HEIGHT) <= BLOCK_HEIGHT)
-        return true;
-    // VRAM[15 * MODE3_WIDTH + 15] = 0x03E0;
-    return false;
-}
-
 static unsigned int get_block_x_index(unsigned int x) {
+    // VRAM[(x - BLOCK_MARGIN_X) / (BLOCK_GAP + BLOCK_LENGTH)] = 0x03E0;
+    // if((x - BLOCK_MARGIN_X) / (BLOCK_GAP + BLOCK_LENGTH) == 9)
+    //     VRAM[(x - BLOCK_MARGIN_X) / (BLOCK_GAP + BLOCK_LENGTH)] = 0x03E0;
     return (x - BLOCK_MARGIN_X) / (BLOCK_GAP + BLOCK_LENGTH);
 }
 
 static unsigned int get_block_y_index(unsigned int y) {
+    // if((y - 1 - BLOCK_MARGIN_Y) / (BLOCK_GAP + BLOCK_HEIGHT) == 2)
+    //     VRAM[(y - BLOCK_MARGIN_Y) / (BLOCK_GAP + BLOCK_HEIGHT)] = 0x001F;
     return (y - BLOCK_MARGIN_Y) / (BLOCK_GAP + BLOCK_HEIGHT);
+}
+
+static bool is_block_hit(bool** block, unsigned short x, unsigned short y) {
+    unsigned short block_max_x = BLOCK_MARGIN_X + (BLOCK_GAP + BLOCK_LENGTH) * SIDEWAYS_BLOCKS - BLOCK_GAP;
+    unsigned short block_max_y = BLOCK_MARGIN_Y + (BLOCK_GAP + BLOCK_HEIGHT) * LENGTHWAYS_BLOCKS - BLOCK_GAP;
+    if(x <= BLOCK_MARGIN_X || x > block_max_x || y <= BLOCK_MARGIN_Y || y > block_max_y) 
+        return false;
+    if((x - BLOCK_MARGIN_X) % (BLOCK_GAP + BLOCK_LENGTH) <= BLOCK_LENGTH && (y - BLOCK_MARGIN_Y) % (BLOCK_GAP + BLOCK_HEIGHT) <= BLOCK_HEIGHT)
+        return block[get_block_x_index(x)][get_block_y_index(y)];
+    // VRAM[15 * MODE3_WIDTH + 15] = 0x03E0;
+    return false;
 }
 
 typedef struct {
@@ -56,16 +61,16 @@ typedef struct {
     unsigned short block_y;
 } collision;
 
-static collision is_colliding(const struct game_status* state, unsigned short x, unsigned short y) {
+static collision is_colliding(struct game_status* state, unsigned short x, unsigned short y) {
 
     if (is_wall_hit(x, y)) {
         collision ret = { WALL };
         return ret;
     }
 
-    if (is_block_hit(x, y)) {
+    if (is_block_hit(state->block, x, y)) {
         collision ret = { BLOCK };
-        // state->block[get_block_x_index(x)][get_block_y_index(y)] = false;
+        state->block[get_block_x_index(x)][get_block_y_index(y)] = false;
         ret.block_x = get_block_x_index(x) * (BLOCK_LENGTH + BLOCK_GAP) + BLOCK_MARGIN_X;
         ret.block_y = get_block_y_index(y) * (BLOCK_HEIGHT + BLOCK_GAP) + BLOCK_MARGIN_Y;
         return ret;
