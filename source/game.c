@@ -43,13 +43,13 @@ static unsigned int get_block_y_index(unsigned int y) {
     return (y - BLOCK_MARGIN_Y) / (BLOCK_GAP + BLOCK_HEIGHT);
 }
 
-static bool is_block_hit(bool** block, unsigned short x, unsigned short y) {
+static bool is_block_hit(bool* block, unsigned short x, unsigned short y) {
     unsigned short block_max_x = BLOCK_MARGIN_X + (BLOCK_GAP + BLOCK_LENGTH) * SIDEWAYS_BLOCKS - BLOCK_GAP;
     unsigned short block_max_y = BLOCK_MARGIN_Y + (BLOCK_GAP + BLOCK_HEIGHT) * LENGTHWAYS_BLOCKS - BLOCK_GAP;
     if(x <= BLOCK_MARGIN_X || x > block_max_x || y <= BLOCK_MARGIN_Y || y > block_max_y) 
         return false;
     if((x - BLOCK_MARGIN_X) % (BLOCK_GAP + BLOCK_LENGTH) <= BLOCK_LENGTH && (y - BLOCK_MARGIN_Y) % (BLOCK_GAP + BLOCK_HEIGHT) <= BLOCK_HEIGHT)
-        return block[get_block_x_index(x)][get_block_y_index(y)];
+        return block[get_block_y_index(y) * BLOCK_LENGTH + get_block_x_index(x)];
     // VRAM[15 * MODE3_WIDTH + 15] = 0x03E0;
     return false;
 }
