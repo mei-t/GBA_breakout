@@ -5,7 +5,7 @@ void game_init(struct game_status* state){
     // Initialize state.
     for(int i = 0; i < SIDEWAYS_BLOCKS; i++){
         for(int j = 0; j < LENGTHWAYS_BLOCKS; j++){
-            state->block[i][j] = true;
+            state->block[j * BLOCK_LENGTH + i] = true;
         }
     }
     struct ball_status ball = {GAME_WIDTH/2, PAD_HEIGHT-1, true, false};
@@ -70,7 +70,7 @@ static collision is_colliding(struct game_status* state, unsigned short x, unsig
 
     if (is_block_hit(state->block, x, y)) {
         collision ret = { BLOCK };
-        state->block[get_block_x_index(x)][get_block_y_index(y)] = false;
+        state->block[get_block_y_index(y) * BLOCK_LENGTH + get_block_x_index(x)] = false;
         ret.block_x = get_block_x_index(x) * (BLOCK_LENGTH + BLOCK_GAP) + BLOCK_MARGIN_X;
         ret.block_y = get_block_y_index(y) * (BLOCK_HEIGHT + BLOCK_GAP) + BLOCK_MARGIN_Y;
         return ret;
@@ -106,8 +106,7 @@ void define_ball_orbit(struct game_status* state){
             block_hit = true;
 
             // VRAM[15 * MODE3_WIDTH + 15] = 0x03E0;
-            // TODO: replace this function with one that uses col.block_x and col.block_y
-            // to delete the block, without using a color.
+
             gfx_delete_block(col.block_x, col.block_y);
         }
         state->ball.is_left = !state->ball.is_left;

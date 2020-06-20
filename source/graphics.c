@@ -81,7 +81,7 @@ void gfx_init(const struct game_status* state){
     // Draw blocks.
     for(int i=0; i<SIDEWAYS_BLOCKS; i++){
         for(int j=0; j<LENGTHWAYS_BLOCKS; j++){
-            if(state->block[i][j]){
+            if(state->block[j * BLOCK_LENGTH + i]){
                 draw_block(i * (BLOCK_LENGTH + BLOCK_GAP) + BLOCK_MARGIN_X, j * (BLOCK_HEIGHT + BLOCK_GAP) + BLOCK_MARGIN_Y, 0x7C00);
             }
         }
@@ -116,8 +116,6 @@ void gfx_init(const struct game_status* state){
 }
 
 void gfx_delete_block(unsigned short x, unsigned short y){
-    // set_pixel(0, 0, 0x03E0);
-    // TODO: Fix
     for(int i=0; i<BLOCK_HEIGHT; i++){
         for(int j=0; j<BLOCK_LENGTH; j++){
             set_pixel(x+j, y+i, 0x0);

@@ -8,7 +8,7 @@
 #define LENGTHWAYS_BLOCKS 3
 
 struct game_status {
-    bool block[SIDEWAYS_BLOCKS][LENGTHWAYS_BLOCKS];
+    bool block[SIDEWAYS_BLOCKS * LENGTHWAYS_BLOCKS];
 
     struct ball_status {
         unsigned short x;
