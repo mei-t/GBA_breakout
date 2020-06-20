@@ -102,11 +102,8 @@ void define_ball_orbit(struct game_status* state){
     collision col = can_go_horizontal(state, &state->ball);
     if(col.type != NOTHING) {
         if(col.type == BLOCK) {
-            unsigned short next_x = state->ball.x + (state->ball.is_left ? -1 : 1);
             block_hit = true;
-
             // VRAM[15 * MODE3_WIDTH + 15] = 0x03E0;
-
             gfx_delete_block(col.block_x, col.block_y);
         }
         state->ball.is_left = !state->ball.is_left;
@@ -115,7 +112,6 @@ void define_ball_orbit(struct game_status* state){
     col = can_go_vertical(state, &state->ball);
     if(col.type != NOTHING) {
         if(col.type == BLOCK) {
-            unsigned short next_y = state->ball.y + (state->ball.is_up ? -1 : 1);
             block_hit = true;
             // VRAM[15 * MODE3_WIDTH + 15] = 0x001F;
             gfx_delete_block(col.block_x, col.block_y);
