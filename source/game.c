@@ -20,8 +20,6 @@ bool is_pressed(unsigned short BUTTON, unsigned short buttons){
     return (BUTTON & buttons) == 0;
 }
 
-// typedef enum { NOTHING, BLOCK, WALL } collision;
-
 static bool is_wall_hit(unsigned short x, unsigned short y) {
     return (x == 0 || x >= GAME_WIDTH || y == 0 || y >= MODE3_HEIGHT - 1);
 }
@@ -31,15 +29,10 @@ static bool is_pad_hit(const struct game_status* state, unsigned short x, unsign
 }
 
 static unsigned int get_block_x_index(unsigned int x) {
-    // VRAM[(x - BLOCK_MARGIN_X) / (BLOCK_GAP + BLOCK_LENGTH)] = 0x03E0;
-    // if((x - BLOCK_MARGIN_X) / (BLOCK_GAP + BLOCK_LENGTH) == 9)
-    //     VRAM[(x - BLOCK_MARGIN_X) / (BLOCK_GAP + BLOCK_LENGTH)] = 0x03E0;
     return (x - BLOCK_MARGIN_X) / (BLOCK_GAP + BLOCK_LENGTH);
 }
 
 static unsigned int get_block_y_index(unsigned int y) {
-    // if((y - 1 - BLOCK_MARGIN_Y) / (BLOCK_GAP + BLOCK_HEIGHT) == 2)
-    //     VRAM[(y - BLOCK_MARGIN_Y) / (BLOCK_GAP + BLOCK_HEIGHT)] = 0x001F;
     return (y - BLOCK_MARGIN_Y) / (BLOCK_GAP + BLOCK_HEIGHT);
 }
 
@@ -50,7 +43,6 @@ static bool is_block_hit(bool* block, unsigned short x, unsigned short y) {
         return false;
     if((x - BLOCK_MARGIN_X) % (BLOCK_GAP + BLOCK_LENGTH) <= BLOCK_LENGTH && (y - BLOCK_MARGIN_Y) % (BLOCK_GAP + BLOCK_HEIGHT) <= BLOCK_HEIGHT)
         return block[get_block_y_index(y) * BLOCK_LENGTH + get_block_x_index(x)];
-    // VRAM[15 * MODE3_WIDTH + 15] = 0x03E0;
     return false;
 }
 
@@ -85,13 +77,13 @@ static collision is_colliding(struct game_status* state, unsigned short x, unsig
     return ret;
 }
 
-static collision can_go_horizontal(const struct game_status* state, const struct ball_status* ball_state){
+static collision can_go_horizontal(struct game_status* state, const struct ball_status* ball_state){
     unsigned short x = ball_state->x;
     ball_state->is_left ? x-- : x++;
     return is_colliding(state, x, ball_state->y);
 }
 
-static collision can_go_vertical(const struct game_status* state, const struct ball_status* ball_state){
+static collision can_go_vertical(struct game_status* state, const struct ball_status* ball_state){
     unsigned short y = ball_state->y;
     ball_state->is_up ? y-- : y++;
     return is_colliding(state, ball_state->x, y);
@@ -103,7 +95,6 @@ void define_ball_orbit(struct game_status* state){
     if(col.type != NOTHING) {
         if(col.type == BLOCK) {
             block_hit = true;
-            // VRAM[15 * MODE3_WIDTH + 15] = 0x03E0;
             gfx_delete_block(col.block_x, col.block_y);
         }
         state->ball.is_left = !state->ball.is_left;
@@ -113,7 +104,6 @@ void define_ball_orbit(struct game_status* state){
     if(col.type != NOTHING) {
         if(col.type == BLOCK) {
             block_hit = true;
-            // VRAM[15 * MODE3_WIDTH + 15] = 0x001F;
             gfx_delete_block(col.block_x, col.block_y);
         }
         state->ball.is_up = !state->ball.is_up;
