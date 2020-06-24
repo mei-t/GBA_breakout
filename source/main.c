@@ -39,7 +39,6 @@ int main(void){
         char buttons = ioreg[0x130];
 
         define_ball_orbit(&state);
-        update_ball(&state.ball);
 
         // if Right is pressed
         if (is_pressed(BUTTON_RIGHT, buttons) && state.pad.x < GAME_WIDTH - PAD_LENGTH/2 - 1) {
