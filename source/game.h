@@ -31,8 +31,6 @@ void game_init(struct game_status* state);
 /* If the button pressed or not. */
 bool is_pressed(unsigned short BUTTON, unsigned short buttons);
 
-void check_next(struct game_status* state);
-
 void game_update(struct game_status* state);
 
 #endif
