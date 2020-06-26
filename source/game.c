@@ -89,7 +89,7 @@ static collision can_go_vertical(struct game_status* state, const struct ball_st
     return is_colliding(state, ball_state->x, y);
 }
 
-void define_ball_orbit(struct game_status* state){
+void game_update(struct game_status* state){
     bool block_hit = false;
     collision col = can_go_horizontal(state, &state->ball);
     if(col.type != NOTHING) {

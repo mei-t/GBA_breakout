@@ -33,6 +33,6 @@ bool is_pressed(unsigned short BUTTON, unsigned short buttons);
 
 void check_next(struct game_status* state);
 
-void define_ball_orbit(struct game_status* state);
+void game_update(struct game_status* state);
 
 #endif
