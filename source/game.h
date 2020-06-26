@@ -28,8 +28,8 @@ struct game_status {
 /* Initialize game status. */
 void game_init(struct game_status* state);
 
-/* If the button pressed or not. */
-bool is_pressed(unsigned short BUTTON, unsigned short buttons);
+/* Handle input. */
+void game_handle_input(struct game_status* state);
 
 void game_update(struct game_status* state);
 

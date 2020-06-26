@@ -9,10 +9,6 @@
 /* Vertical sync */
 #define REG_VCOUNT VR16(REG_IOBASE + 0x6)
 
-/* Status of buttons */
-#define BUTTON_RIGHT (1 << 4)
-#define BUTTON_LEFT (1 << 5)
-
 /* Wait for vertical sync */
 void wait_vsync() {
     while (REG_VCOUNT >= MODE3_HEIGHT);
@@ -20,7 +16,6 @@ void wait_vsync() {
 }
 
 int main(void){
-    volatile char *ioreg = (char *)0x04000000;
     struct game_status state;
     game_init(&state);
     gfx_init(&state);
@@ -36,21 +31,8 @@ int main(void){
             return 0;
         }
 
-        char buttons = ioreg[0x130];
-
         game_update(&state);
-
-        // if Right is pressed
-        if (is_pressed(BUTTON_RIGHT, buttons) && state.pad.x < GAME_WIDTH - PAD_LENGTH/2 - 1) {
-            state.pad.x++;
-            gfx_update_pad(&state.pad);
-        }
-
-        // if Left is pressed
-        if (is_pressed(BUTTON_LEFT, buttons) && state.pad.x > PAD_LENGTH/2 + 1) {
-            state.pad.x--;
-            gfx_update_pad(&state.pad);
-        }
+        game_handle_input(&state);
 
         // vram[80*240 + x] = 0xFFFF; // X = x, Y = 80, C = 111111111111 = W
         wait_vsync();

@@ -1,6 +1,10 @@
 #include "game.h"
 #include "graphics.h"
 
+/* Status of buttons */
+#define BUTTON_RIGHT (1 << 4)
+#define BUTTON_LEFT (1 << 5)
+
 void game_init(struct game_status* state){
     // Initialize state.
     for(int i = 0; i < SIDEWAYS_BLOCKS; i++){
@@ -16,7 +20,8 @@ void game_init(struct game_status* state){
 
 }
 
-bool is_pressed(unsigned short BUTTON, unsigned short buttons){
+/* If the button pressed or not. */
+static bool is_pressed(unsigned short BUTTON, unsigned short buttons){
     return (BUTTON & buttons) == 0;
 }
 
@@ -89,6 +94,20 @@ static collision can_go_vertical(struct game_status* state, const struct ball_st
     return is_colliding(state, ball_state->x, y);
 }
 
+void game_handle_input(struct game_status* state){
+    volatile char *ioreg = (char *)0x04000000;
+    char buttons = ioreg[0x130];
+
+    // if Right is pressed
+    if (is_pressed(BUTTON_RIGHT, buttons) && state->pad.x < GAME_WIDTH - PAD_LENGTH/2 - 1) {
+        state->pad.x++;
+    }
+    // if Left is pressed
+    if (is_pressed(BUTTON_LEFT, buttons) && state->pad.x > PAD_LENGTH/2 + 1) {
+        state->pad.x--;
+    }
+}
+
 void game_update(struct game_status* state){
     bool block_hit = false;
     collision col = can_go_horizontal(state, &state->ball);
@@ -112,6 +131,8 @@ void game_update(struct game_status* state){
     state->ball.is_up ? state->ball.y-- : state->ball.y++;
     state->ball.is_left ? state->ball.x-- : state->ball.x++;
     gfx_update_ball(&state->ball);
+
+    gfx_update_pad(&state->pad);
 
     if(block_hit) {
         state->score++;
