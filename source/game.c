@@ -108,7 +108,7 @@ void game_handle_input(struct game_status* state){
     }
 }
 
-void game_update(struct game_status* state){
+enum game_state game_update(struct game_status* state){
     bool block_hit = false;
     collision col = can_go_horizontal(state, &state->ball);
     if(col.type != NOTHING) {
@@ -138,4 +138,11 @@ void game_update(struct game_status* state){
         state->score++;
         gfx_update_score(state->score);
     }
+
+    if(state->ball.y == MODE3_HEIGHT-2){
+        return GAME_OVER;
+    }else if(state->score == SIDEWAYS_BLOCKS * LENGTHWAYS_BLOCKS){
+        return GAME_WON;
+    }
+    return PLAYING;
 }

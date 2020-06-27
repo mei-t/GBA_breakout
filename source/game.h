@@ -25,12 +25,18 @@ struct game_status {
     unsigned int score;
 };
 
+enum game_state {
+    PLAYING,
+    GAME_WON,
+    GAME_OVER,
+};
+
 /* Initialize game status. */
 void game_init(struct game_status* state);
 
 /* Handle input. */
 void game_handle_input(struct game_status* state);
 
-void game_update(struct game_status* state);
+enum game_state game_update(struct game_status* state);
 
 #endif

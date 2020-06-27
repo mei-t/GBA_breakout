@@ -22,17 +22,17 @@ int main(void){
 
     // Wait forever
     while(1){
-        if(state.ball.y == MODE3_HEIGHT-2){
-            gfx_draw_game_over();
-            return 0;
-        }else if(state.score == SIDEWAYS_BLOCKS * LENGTHWAYS_BLOCKS){
-            // set_pixel(25, 25, 0x7C00); // brue
-            gfx_draw_game_clear();
-            return 0;
-        }
-
-        game_update(&state);
         game_handle_input(&state);
+        switch(game_update(&state)) {
+            case PLAYING:
+                break;
+            case GAME_WON:
+                gfx_draw_game_clear();
+                return 0;
+            case GAME_OVER:
+                gfx_draw_game_over();
+                return 0;
+        }
 
         // vram[80*240 + x] = 0xFFFF; // X = x, Y = 80, C = 111111111111 = W
         wait_vsync();
