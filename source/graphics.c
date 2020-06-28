@@ -1,6 +1,13 @@
 #include "graphics.h"
 #include "game.h"
 
+/* 16-bit volatile register */
+#define VR16(x) *((volatile unsigned short *)(x))
+
+#define REG_IOBASE 0x04000000
+/* Vertical sync */
+#define REG_VCOUNT VR16(REG_IOBASE + 0x6)
+
 static int number[10][7] = {
     {1, 0, 1, 1, 1, 1, 1},
     {0, 0, 0, 0, 1, 0, 1},
@@ -176,3 +183,8 @@ void gfx_draw_game_over(){
 }
 
 void gfx_draw_game_clear(){}
+
+void gfx_wait_end_frame() {
+    while (REG_VCOUNT >= MODE3_HEIGHT);
+    while (REG_VCOUNT < MODE3_HEIGHT);
+}

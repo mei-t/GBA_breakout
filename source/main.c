@@ -2,19 +2,6 @@
 #include "game.h"
 #include "graphics.h"
 
-/* 16-bit volatile register */
-#define VR16(x) *((volatile unsigned short *)(x))
-
-#define REG_IOBASE 0x04000000
-/* Vertical sync */
-#define REG_VCOUNT VR16(REG_IOBASE + 0x6)
-
-/* Wait for vertical sync */
-void wait_vsync() {
-    while (REG_VCOUNT >= MODE3_HEIGHT);
-    while (REG_VCOUNT < MODE3_HEIGHT);
-}
-
 int main(void){
     struct game_status state;
     game_init(&state);
@@ -35,7 +22,7 @@ int main(void){
         }
 
         // vram[80*240 + x] = 0xFFFF; // X = x, Y = 80, C = 111111111111 = W
-        wait_vsync();
+        gfx_wait_end_frame();
     }
 
     return 0;

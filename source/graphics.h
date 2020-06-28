@@ -52,4 +52,7 @@ void gfx_draw_game_over();
 /* Draw the game clear screen */
 void gfx_draw_game_clear();
 
+/* Wait for vertical sync */
+void gfx_wait_end_frame();
+
 #endif
