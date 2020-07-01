@@ -3,5 +3,5 @@
 *.d
 *.o
 *.map
-video.mov
-result.gif
+*.mov
+*.gif
