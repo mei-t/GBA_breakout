@@ -127,6 +127,36 @@ static int letter_r[12][9] = {
     {1, 1, 1, 0, 0, 0, 1, 1, 1}
 };
 
+static int letter_c[12][9] = {
+    {0, 0, 1, 1, 1, 1, 1, 0, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 0},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {0, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 0, 1, 1, 1, 1, 1, 0, 0}
+};
+
+static int letter_l[12][9] = {
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1}
+};
+
 // The previous position of the ball. so we can delete it.
 static unsigned short prev_ball_x;
 static unsigned short prev_ball_y;
@@ -323,7 +353,36 @@ void gfx_draw_game_over(){
     }
 }
 
-void gfx_draw_game_clear(){}
+void gfx_draw_game_clear(){
+    draw_frame(30);
+    draw_game(30);
+    for(int i = 72; i < 79; i++) {
+        for(int j = 0; j < 12; j++) {
+            set_pixel(i, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+        }
+    }
+    int start_pos[8] = {79, 90, 101, 112, 123};
+    for(int i=0; i<12; i++) {
+        for(int j=0; j<9; j++) {
+            if(letter_c[i][j] == 0)
+                set_pixel(j + start_pos[0], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            if(letter_l[i][j] == 0)
+                set_pixel(j + start_pos[1], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            if(letter_e[i][j] == 0)
+                set_pixel(j + start_pos[2], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            if(letter_a[i][j] == 0)
+                set_pixel(j + start_pos[3], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            if(letter_r[i][j] == 0)
+                set_pixel(j + start_pos[4], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+        }
+    }
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 12; j++) {
+            set_pixel(start_pos[i] + 9, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            set_pixel(start_pos[i] + 10, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+        }
+    }
+}
 
 void gfx_wait_end_frame() {
     while (REG_VCOUNT >= MODE3_HEIGHT);
