@@ -21,6 +21,7 @@ static int number[10][7] = {
     {1, 1, 1, 1, 1, 0, 1}
 };
 
+// https://jp.123rf.com/photo_15912940_%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB-%E3%82%A2%E3%83%AB%E3%83%95%E3%82%A1%E3%83%99%E3%83%83%E3%83%88%E3%81%A8%E6%95%B0%E5%AD%97%E3%81%A8%E8%A8%98%E5%8F%B7.html
 static int letter_g[12][9] = {
     {0, 0, 1, 1, 1, 1, 1, 0, 0},
     {0, 1, 1, 1, 1, 1, 1, 1, 0},
@@ -34,6 +35,96 @@ static int letter_g[12][9] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1},
     {0, 1, 1, 1, 1, 1, 1, 1, 0},
     {0, 0, 1, 1, 1, 1, 1, 0, 0}
+};
+
+static int letter_a[12][9] = {
+    {0, 0, 1, 1, 1, 1, 1, 0, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 0},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1}
+};
+
+static int letter_m[12][9] = {
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 1, 0, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 0, 1, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1}
+};
+
+static int letter_e[12][9] = {
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 0, 0, 0, 0, 0, 0},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1}
+};
+
+static int letter_o[12][9] = {
+    {0, 0, 1, 1, 1, 1, 1, 0, 0},
+    {0, 1, 1, 1, 1, 1, 1, 1, 0},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {0, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 0, 1, 1, 1, 1, 1, 0, 0}
+};
+
+static int letter_v[12][9] = {
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 1, 0, 1, 1, 1, 1},
+    {0, 1, 1, 1, 1, 1, 1, 1, 0},
+    {0, 0, 1, 1, 1, 1, 1, 0, 0},
+    {0, 0, 0, 1, 1, 1, 0, 0, 0}
+};
+
+static int letter_r[12][9] = {
+    {1, 1, 1, 1, 1, 1, 1, 0, 0},
+    {1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 0},
+    {1, 1, 1, 1, 1, 1, 0, 0, 0},
+    {1, 1, 1, 1, 1, 1, 1, 0, 0},
+    {1, 1, 1, 0, 1, 1, 1, 1, 0},
+    {1, 1, 1, 0, 0, 1, 1, 1, 1},
+    {1, 1, 1, 0, 0, 0, 1, 1, 1}
 };
 
 // The previous position of the ball. so we can delete it.
@@ -166,20 +257,70 @@ void gfx_update_score(unsigned int score){
     }while(score != 0);
 }
 
-void gfx_draw_game_over(){
+static void draw_frame(unsigned short x) {
     for(int i=1; i<GAME_WIDTH; i++){
         set_pixel(i, MODE3_HEIGHT/2 - 7, 0xFFFF);
         set_pixel(i, MODE3_HEIGHT/2 - 6, 0xFFFF);
         set_pixel(i, MODE3_HEIGHT/2 + 7, 0xFFFF);
         set_pixel(i, MODE3_HEIGHT/2 + 8, 0xFFFF);
     }
-    for(int i=1; i<45; i++){
+    for(int i=1; i<x; i++){
         for(int j=0; j<12; j++){
             set_pixel(i, MODE3_HEIGHT/2 - 5 + j, 0xFFFF);
             set_pixel(160 - i, MODE3_HEIGHT/2 - 5 + j, 0xFFFF);
         }
     }
-    int start_pos[8] = {45, 56, 67, 78, 84, 95, 106, 117};
+}
+
+static void draw_game(unsigned short x) {
+    int start_pos[8] = {x, x + 11, x + 22, x + 33};
+    for(int i=0; i<12; i++) {
+        for(int j=0; j<9; j++) {
+            if(letter_g[i][j] == 0)
+                set_pixel(j + start_pos[0], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            if(letter_a[i][j] == 0)
+                set_pixel(j + start_pos[1], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            if(letter_m[i][j] == 0)
+                set_pixel(j + start_pos[2], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            if(letter_e[i][j] == 0)
+                set_pixel(j + start_pos[3], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+        }
+    }
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 12; j++) {
+            set_pixel(start_pos[i] + 9, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            set_pixel(start_pos[i] + 10, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+        }
+    }
+}
+
+void gfx_draw_game_over(){
+    draw_frame(36);
+    draw_game(36);
+    for(int i = 78; i < 84; i++) {
+        for(int j = 0; j < 12; j++) {
+            set_pixel(i, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+        }
+    }
+    int start_pos[8] = {84, 95, 106, 117};
+    for(int i=0; i<12; i++) {
+        for(int j=0; j<9; j++) {
+            if(letter_o[i][j] == 0)
+                set_pixel(j + start_pos[0], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            if(letter_v[i][j] == 0)
+                set_pixel(j + start_pos[1], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            if(letter_e[i][j] == 0)
+                set_pixel(j + start_pos[2], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            if(letter_r[i][j] == 0)
+                set_pixel(j + start_pos[3], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+        }
+    }
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 12; j++) {
+            set_pixel(start_pos[i] + 9, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            set_pixel(start_pos[i] + 10, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+        }
+    }
 }
 
 void gfx_draw_game_clear(){}
