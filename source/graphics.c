@@ -287,16 +287,17 @@ void gfx_update_score(unsigned int score){
 }
 
 static void draw_frame(unsigned short x) {
-    for(int i=1; i<GAME_WIDTH; i++){
-        set_pixel(i, MODE3_HEIGHT/2 - 7, 0xFFFF);
-        set_pixel(i, MODE3_HEIGHT/2 - 6, 0xFFFF);
-        set_pixel(i, MODE3_HEIGHT/2 + 7, 0xFFFF);
-        set_pixel(i, MODE3_HEIGHT/2 + 8, 0xFFFF);
+    for(int j=1; j<GAME_WIDTH; j++){
+        set_pixel(j, MODE3_HEIGHT/2 - 7, 0xFFFF);
+        set_pixel(j, MODE3_HEIGHT/2 - 6, 0xFFFF);
+        set_pixel(j, MODE3_HEIGHT/2 + 7, 0xFFFF);
+        set_pixel(j, MODE3_HEIGHT/2 + 8, 0xFFFF);
     }
-    for(int i=1; i<x; i++){
-        for(int j=0; j<12; j++){
-            set_pixel(i, MODE3_HEIGHT/2 - 5 + j, 0xFFFF);
-            set_pixel(160 - i, MODE3_HEIGHT/2 - 5 + j, 0xFFFF);
+
+    for(int i=0; i<12; i++){
+        for(int j=1; j<x; j++){
+            set_pixel(j, MODE3_HEIGHT/2 - 5 + i, 0xFFFF);
+            set_pixel(160 - j, MODE3_HEIGHT/2 - 5 + i, 0xFFFF);
         }
     }
 }
@@ -315,10 +316,10 @@ static void draw_game(unsigned short x) {
                 set_pixel(j + start_pos[3], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
         }
     }
-    for(int i = 0; i < 3; i++) {
-        for(int j = 0; j < 12; j++) {
-            set_pixel(start_pos[i] + 9, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
-            set_pixel(start_pos[i] + 10, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+    for(int i = 0; i < 12; i++) {
+        for(int j = 0; j < 3; j++) {
+            set_pixel(start_pos[j] + 9, i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            set_pixel(start_pos[j] + 10, i + MODE3_HEIGHT/2 - 5, 0xFFFF);
         }
     }
 }
@@ -344,10 +345,10 @@ void gfx_draw_game_over(){
                 set_pixel(j + start_pos[3], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
         }
     }
-    for(int i = 0; i < 3; i++) {
-        for(int j = 0; j < 12; j++) {
-            set_pixel(start_pos[i] + 9, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
-            set_pixel(start_pos[i] + 10, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+    for(int i = 0; i < 12; i++) {
+        for(int j = 0; j < 3; j++) {
+            set_pixel(start_pos[j] + 9, i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            set_pixel(start_pos[j] + 10, i + MODE3_HEIGHT/2 - 5, 0xFFFF);
         }
     }
 }
@@ -355,9 +356,9 @@ void gfx_draw_game_over(){
 void gfx_draw_game_clear(){
     draw_frame(30);
     draw_game(30);
-    for(int i = 72; i < 79; i++) {
-        for(int j = 0; j < 12; j++) {
-            set_pixel(i, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+    for(int i = 0; i < 12; i++) {
+        for(int j = 72; j < 79; j++) {
+            set_pixel(j, i + MODE3_HEIGHT/2 - 5, 0xFFFF);
         }
     }
     int start_pos[8] = {79, 90, 101, 112, 123};
@@ -375,10 +376,10 @@ void gfx_draw_game_clear(){
                 set_pixel(j + start_pos[4], i + MODE3_HEIGHT/2 - 5, 0xFFFF);
         }
     }
-    for(int i = 0; i < 4; i++) {
-        for(int j = 0; j < 12; j++) {
-            set_pixel(start_pos[i] + 9, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
-            set_pixel(start_pos[i] + 10, j + MODE3_HEIGHT/2 - 5, 0xFFFF);
+    for(int i = 0; i < 12; i++) {
+        for(int j = 0; j < 4; j++) {
+            set_pixel(start_pos[j] + 9, i + MODE3_HEIGHT/2 - 5, 0xFFFF);
+            set_pixel(start_pos[j] + 10, i + MODE3_HEIGHT/2 - 5, 0xFFFF);
         }
     }
 }
